@@ -16,6 +16,7 @@ les autres sont facultatifs. Cette page dit ce que chacun attend de Home Assista
 | Extérieur | `outdoor` | Des interrupteurs (pompe de piscine, lumières du jardin…) et un capteur de température de piscine. |
 | Ménage | `cleaning` | Des entités `vacuum`. Le nettoyage par pièce utilise `vacuum.clean_area` : les pièces du robot doivent être reliées aux pièces de Home Assistant. |
 | Caméras | `cameras` | Des entités `camera`. Facultatif : capteurs de personne, entité `event` de sonnette, sélecteurs de mode de sécurité. |
+| Automatisations | — | L'intégration Paddock 0.4.0 ou plus. Utilise les appareils déjà dans `paddock.yaml` : voir [automations.md](automations.md). |
 
 ## Les cas particuliers
 

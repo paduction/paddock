@@ -55,6 +55,7 @@ vraies entités et le vérifie. Les autres assistants lisent [AGENTS.md](AGENTS.
 | Installer | [install.md](docs/fr/install.md) | [install.md](docs/en/install.md) |
 | Tous les réglages de `paddock.yaml` | [configuration.md](docs/fr/configuration.md) | [configuration.md](docs/en/configuration.md) |
 | Ce dont chaque écran a besoin | [modules.md](docs/fr/modules.md) | [modules.md](docs/en/modules.md) |
+| Horaires et modes | [automations.md](docs/fr/automations.md) | [automations.md](docs/en/automations.md) |
 | Régler la tablette | [tablet.md](docs/fr/tablet.md) | [tablet.md](docs/en/tablet.md) |
 | Comptes, sécurité, accès de l'extérieur | [security.md](docs/fr/security.md) | [security.md](docs/en/security.md) |
 

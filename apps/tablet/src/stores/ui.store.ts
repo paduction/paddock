@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type ViewId = 'home' | 'lights' | 'covers' | 'cinema' | 'gaming' | 'music' | 'energy' | 'outdoor' | 'cleaning' | 'cameras'
+export type ViewId = 'home' | 'lights' | 'covers' | 'cinema' | 'gaming' | 'music' | 'energy' | 'outdoor' | 'cleaning' | 'cameras' | 'automations'
 
 /** Panel opened from the sidebar / navigation. */
 export type Overlay = { kind: 'weather' } | { kind: 'agenda'; selected: number | null } | { kind: 'climate'; mode: 'in' | 'pool'; range: '24h' | '7d' | '30d' } | { kind: 'people' } | { kind: 'game' } | { kind: 'gameDetail'; id: number; title: string; image: string | null }

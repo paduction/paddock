@@ -16,6 +16,7 @@ the others are optional. This page says what each one expects from Home Assistan
 | Outdoor | `outdoor` | Switches (pool pump, garden lights…) and a pool temperature sensor. |
 | Cleaning | `cleaning` | `vacuum` entities. Room cleaning uses `vacuum.clean_area`, so the robot's rooms must be linked to Home Assistant areas. |
 | Cameras | `cameras` | `camera` entities. Optional: person sensors, a doorbell `event` entity, security mode selects. |
+| Automations | — | The Paddock integration 0.4.0 or later. Uses the devices already in `paddock.yaml`: see [automations.md](automations.md). |
 
 ## Things that are specific
 

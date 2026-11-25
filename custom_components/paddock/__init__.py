@@ -1,4 +1,4 @@
-"""Paddock: gives the wall tablet its configuration once it is signed in.
+"""Paddock: gives the wall tablet its configuration once it is signed in, and runs its automations.
 
 The tablet app itself is static (www/paddock, readable without signing in).
 Everything specific to the home (entity ids, rooms, keys) lives in paddock.yaml
@@ -21,6 +21,7 @@ from homeassistant.exceptions import HomeAssistantError, ServiceValidationError,
 from homeassistant.util import dt as dt_util
 from homeassistant.util.yaml import Secrets, load_yaml_dict
 
+from .automations import Automations, async_register_commands
 from .const import CONFIG_FILE, DOMAIN
 
 EVENT_ACCOUNT_ASSIGNED = "paddock_account_assigned"
@@ -29,19 +30,24 @@ TOKEN_LIFESPAN = timedelta(days=3650)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Register the websocket commands and the service (once)."""
+    """Register the websocket commands and the service (once), then start the automations."""
     if not hass.data.get(DOMAIN):
         websocket_api.async_register_command(hass, ws_get_config)
         websocket_api.async_register_command(hass, ws_claim_account)
+        async_register_commands(hass)
         hass.services.async_register(
             DOMAIN, "assign_account", _service_assign_account(hass), schema=vol.Schema({vol.Required("user"): str})
         )
         hass.data[DOMAIN] = {"pending": None}
+    automations = Automations(hass, lambda: _read(hass.config.config_dir))
+    hass.data[DOMAIN]["automations"] = automations
+    await automations.async_start()
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Nothing to tear down: the command stays registered until restart."""
+    """The commands stay registered until restart; the automations stop running."""
+    hass.data[DOMAIN]["automations"].async_stop()
     return True
 
 

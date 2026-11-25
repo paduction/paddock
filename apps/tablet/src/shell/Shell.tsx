@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { Stage } from '@paddock/ui'
 import { CinemaPage } from '../pages/CinemaPage'
+import { AutomationsPage } from '../pages/AutomationsPage'
 import { CamerasPage } from '../pages/CamerasPage'
 import { CleaningPage } from '../pages/CleaningPage'
 import { CoversPage } from '../pages/CoversPage'
@@ -32,6 +33,7 @@ const PAGES: Partial<Record<ViewId, ComponentType>> = {
   outdoor: OutdoorPage,
   cleaning: CleaningPage,
   cameras: CamerasPage,
+  automations: AutomationsPage,
 }
 
 /** Sidebar + navigation + current page, on the scaled stage. */

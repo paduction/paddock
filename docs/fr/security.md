@@ -7,6 +7,8 @@
 - **`paddock.yaml`** n'est envoyé que par la connexion authentifiée de Home Assistant, par l'intégration Paddock.
   Tout utilisateur connecté peut le lire en entier, administrateur ou non, y compris les clés référencées par
   `!secret` (la clé RAWG). N'y mettez rien qu'un membre du foyer ne devrait pas voir.
+- **Les automatisations** (horaires et modes) peuvent être créées et modifiées par tout écran connecté, administrateur ou non.
+  Elles ne peuvent agir que sur les appareils listés dans `paddock.yaml`, et peuvent fermer le portail mais jamais l'ouvrir.
 - **Le jeton** saisi sur une tablette ou dans l'application de bureau n'est stocké que sur cet appareil
   (stockage du navigateur). Quelqu'un qui tient l'appareil déverrouillé a les droits de ce compte.
 

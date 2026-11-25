@@ -1,0 +1,85 @@
+.tile {
+  position: relative;
+  border-radius: var(--pd-radius-tile);
+  background: var(--pd-surface);
+  display: grid;
+  transition: background 0.25s;
+  --icon-bg: var(--pd-control);
+  --icon-ink: var(--pd-text);
+}
+
+.started {
+  background: var(--pd-on);
+  --icon-bg: var(--pd-accent);
+  --icon-ink: var(--pd-on-accent);
+}
+
+.run {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  text-align: left;
+  border-radius: inherit;
+  min-height: 132px;
+}
+
+.run:active {
+  transform: scale(0.97);
+}
+
+.iconCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--icon-bg);
+  color: var(--icon-ink);
+  display: grid;
+  place-items: center;
+  transition: background 0.25s;
+}
+
+.texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  width: 100%;
+}
+
+.name {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edit {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  color: var(--pd-text-2);
+  display: grid;
+  place-items: center;
+}
+
+.edit:active {
+  transform: scale(0.9);
+}

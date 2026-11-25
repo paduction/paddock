@@ -1,0 +1,30 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  height: 40px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  color: var(--pd-text-2);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.chip:active {
+  transform: scale(0.95);
+}
+
+.round {
+  width: 40px;
+  padding: 0;
+}
+
+.on {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+}

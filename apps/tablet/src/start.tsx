@@ -13,6 +13,7 @@ import './stores/music.store'
 import './stores/cameras.store'
 import './stores/gaming.store'
 import './stores/account.store'
+import './stores/automations.store'
 
 /** Loaded once the configuration is known (see main.tsx). */
 export function start() {

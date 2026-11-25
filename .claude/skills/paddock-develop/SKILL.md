@@ -60,6 +60,8 @@ as booleans (the two existing `on` / `off` pairs are restored by `_named_keys` i
 
 - Keep it small: it serves `paddock.yaml` and handles the account switch. Rules of the home do not go in Python.
 - A new WebSocket command or service needs its texts in `strings.json` and `translations/en.json`, `fr.json`.
+- Rules go in a module without any Home Assistant import (see `automations_model.py`) so they can be tested alone;
+  the plumbing is tested in `tests/` with `pytest` inside a test Home Assistant.
 - Bump `version` in `manifest.json` when its behaviour changes. It only takes effect after a restart of
   Home Assistant — say so in your summary.
 - Anything that grants access (tokens, accounts) must check the caller is an administrator and must never
@@ -75,6 +77,7 @@ as booleans (the two existing `on` / `off` pairs are restored by `_named_keys` i
 
 ```bash
 pnpm typecheck && pnpm test && pnpm build && pnpm config:check --example
+pytest            # when custom_components/paddock changed
 ```
 
 Then state plainly what you ran, what you could not check (for example anything that needs a real tablet or a

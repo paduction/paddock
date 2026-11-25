@@ -7,6 +7,8 @@
 - **`paddock.yaml`** is only sent over Home Assistant's signed-in connection, by the Paddock integration.
   Any signed-in user can read all of it, administrator or not — including keys referenced with `!secret`
   (the RAWG key). Do not put anything there that a member of the household should not see.
+- **Automations** (schedules and modes) can be created and changed by any signed-in screen, administrator or not.
+  They can only act on the devices listed in `paddock.yaml`, and can close the gate but never open it.
 - **The token** typed on a tablet or in the desktop app is stored on that device only (browser storage).
   Someone holding the unlocked device has the rights of that account.
 

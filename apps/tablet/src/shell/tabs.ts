@@ -14,6 +14,7 @@ const ALL: { id: ViewId; label: MessageKey; icon: string }[] = [
   { id: 'outdoor', label: 'tab.outdoor', icon: 'park' },
   { id: 'cleaning', label: 'tab.cleaning', icon: 'cleaning_services' },
   { id: 'cameras', label: 'tab.cameras', icon: 'videocam' },
+  { id: 'automations', label: 'tab.automations', icon: 'routine' },
 ]
 
 const ENABLED: Partial<Record<ViewId, boolean>> = {

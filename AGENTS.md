@@ -44,7 +44,9 @@ apps/tablet/                 the app
   src/desktop.ts             the only file that knows about the desktop shell
 apps/desktop/                Tauri shell (Rust): a window around the tablet build, two commands, no UI code
 custom_components/paddock/   Home Assistant integration (Python): serves paddock.yaml to signed-in devices,
-                             and the paddock.assign_account service
+                             the paddock.assign_account service, and the automations (schedules and modes):
+                             automations_model.py = the rules (no Home Assistant import), automations.py = storage, timers, websocket
+tests/                       tests of the integration inside a test Home Assistant (pytest)
 server/plex-info/            optional service (Python, Docker): read-only view of a Plex library for the Films screen
 tools/                       discover.ts, config-check.ts, config-export.ts, deploy.sh
 docs/en, docs/fr             user documentation, same pages in both languages
@@ -75,6 +77,7 @@ The layering rule: `ui` never imports `core`'s Home Assistant code and never kno
 | `pnpm config:export --example` | Regenerates `paddock.example.yaml` from `paddock.config.example.ts`. | no |
 | `pnpm dev` | The app at http://localhost:5173 with live reload. | signs in |
 | `pnpm typecheck` / `pnpm test` / `pnpm build` | TypeScript, Vitest, production build. | no |
+| `pytest` | Tests of the integration (`pip install pytest-homeassistant-custom-component` first). | no |
 | `pnpm run deploy` | Builds, checks `paddock.yaml`, copies app + integration + `paddock.yaml` over SSH. | **writes — ask first** |
 | `pnpm desktop:dev` / `pnpm desktop:build` | Desktop app (needs Rust). | no |
 
@@ -113,7 +116,10 @@ The step-by-step version is the skill `.claude/skills/paddock-develop/SKILL.md`.
 - **The integration** is the only Python that runs in Home Assistant. It reads YAML 1.1, where the keys `on`
   and `off` become booleans: `_named_keys` restores them. Keep that in mind for any new setting name.
   The tools read and write `paddock.yaml` the same way (`tools/lib/ha.ts`): always go through `readYaml` / `writeYaml`.
-- Before finishing: `pnpm typecheck && pnpm test && pnpm build && pnpm config:check --example`.
+- **Automations** have their shapes in two places that must agree: `core/src/domain/automations.ts` (interface)
+  and `custom_components/paddock/automations_model.py` (what Home Assistant accepts and runs). A websocket command
+  never uses the field `id`: it is the number of the message itself.
+- Before finishing: `pnpm typecheck && pnpm test && pnpm build && pnpm config:check --example`, and `pytest` when the integration changed.
 
 ## Things that are easy to get wrong
 

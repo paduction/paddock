@@ -54,6 +54,7 @@ checks it. Other assistants read [AGENTS.md](AGENTS.md), which explains the repo
 | Install | [install.md](docs/en/install.md) | [install.md](docs/fr/install.md) |
 | Every setting of `paddock.yaml` | [configuration.md](docs/en/configuration.md) | [configuration.md](docs/fr/configuration.md) |
 | What each screen needs | [modules.md](docs/en/modules.md) | [modules.md](docs/fr/modules.md) |
+| Schedules and modes | [automations.md](docs/en/automations.md) | [automations.md](docs/fr/automations.md) |
 | Setting up the tablet | [tablet.md](docs/en/tablet.md) | [tablet.md](docs/fr/tablet.md) |
 | Accounts, security, access from outside | [security.md](docs/en/security.md) | [security.md](docs/fr/security.md) |
 
