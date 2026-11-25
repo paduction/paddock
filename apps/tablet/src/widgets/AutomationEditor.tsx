@@ -50,7 +50,10 @@ export function AutomationEditor({ initial, devices, onClose }: { initial: Autom
   const [saving, setSaving] = useState(false)
   // an existing automation opens on its first device, not on the top of a long list
   const list = useRef<HTMLDivElement>(null)
-  useEffect(() => list.current?.querySelector(`.${styles.deviceOn}`)?.scrollIntoView({ block: 'center' }), [])
+  useEffect(() => {
+    // braces on purpose: recent browsers return a promise from scrollIntoView, and an effect must return nothing
+    list.current?.querySelector(`.${styles.deviceOn}`)?.scrollIntoView({ block: 'center' })
+  }, [])
   const trigger = draft.trigger
   const groups = [...new Set(devices.map((d) => d.group))]
 
