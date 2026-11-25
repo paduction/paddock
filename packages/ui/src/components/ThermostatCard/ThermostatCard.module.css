@@ -8,6 +8,10 @@
   gap: 10px;
   min-height: 0;
   transition: background 0.4s, box-shadow 0.4s;
+  /* host of the flames background */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 /* The heater is running (costly): warm background and outline, so it shows from across the room. */

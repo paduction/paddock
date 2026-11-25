@@ -1,0 +1,223 @@
+/* Everything here only moves by transform and opacity (see Ambience.tsx). */
+
+.moving {
+  will-change: transform;
+}
+
+:global([data-pd-still]) .moving {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moving {
+    animation: none !important;
+  }
+}
+
+.flames,
+.water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* A state that starts fades in; `leaving` fades it out before it is removed. */
+.flames,
+.set {
+  animation: pd-fade 0.9s ease-out;
+  transition: opacity 0.9s ease-in;
+}
+
+.leaving {
+  opacity: 0;
+}
+
+/* ---------- Flames ---------- */
+
+.flames {
+  height: 40%;
+}
+
+/* The opacity is on the row, not on each flame: flames that overlap read as one flat shape. */
+.row {
+  position: absolute;
+  inset: 0;
+}
+
+.rowBack {
+  color: var(--pd-coral);
+  opacity: 0.2;
+}
+
+.rowFront {
+  color: var(--pd-accent);
+  opacity: 0.16;
+}
+
+.flame {
+  position: absolute;
+  bottom: -6%;
+  transform-origin: 50% 100%;
+  animation: flicker 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes flicker {
+  0% {
+    transform: scale(1, 0.8) skewX(-4deg);
+  }
+  35% {
+    transform: scale(0.93, 1.02) skewX(5deg);
+  }
+  65% {
+    transform: scale(1.05, 0.88) skewX(-2deg);
+  }
+  100% {
+    transform: scale(0.95, 1.1) skewX(4deg);
+  }
+}
+
+/* ---------- Water ---------- */
+
+.water {
+  height: 54%;
+  color: var(--pd-blue-text);
+}
+
+.set {
+  position: absolute;
+  inset: 0;
+}
+
+.bob {
+  position: absolute;
+  inset: 0;
+  animation: bob 1.7s ease-in-out infinite alternate;
+}
+
+/* Crest on top, water below, twice the tile's width: it slides by half of itself. */
+.wave {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 200%;
+  display: flex;
+  flex-direction: column;
+  animation: slide 16s linear infinite;
+}
+
+.crest {
+  flex: none;
+  display: block;
+  width: 100%;
+}
+
+.depth {
+  flex: 1;
+  margin-top: -1px;
+  background: currentColor;
+}
+
+.swellBack {
+  top: -18px;
+  opacity: 0.1;
+  animation-duration: 23s;
+  animation-direction: reverse;
+}
+
+.swellBack .crest {
+  height: 12px;
+}
+
+.swellFront {
+  top: -8px;
+  opacity: 0.12;
+  animation-duration: 15s;
+}
+
+.swellFront .crest {
+  height: 10px;
+}
+
+.chopBack {
+  top: -26px;
+  opacity: 0.1;
+  animation-duration: 7s;
+  animation-direction: reverse;
+}
+
+.chopBack .crest {
+  height: 24px;
+}
+
+.chopFront {
+  top: -12px;
+  opacity: 0.13;
+  animation-duration: 4.5s;
+}
+
+.chopFront .crest {
+  height: 18px;
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bob {
+  from {
+    transform: translateY(-3px);
+  }
+  to {
+    transform: translateY(4px);
+  }
+}
+
+/* A bubble's column is as tall as the water: moving it up by its own height brings the bubble to the surface. */
+.rise {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  animation: rise 4s ease-in infinite;
+}
+
+.bubble {
+  flex: none;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  animation: sway 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(12%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  80% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-96%);
+    opacity: 0;
+  }
+}
+
+@keyframes sway {
+  from {
+    transform: translateX(-4px);
+  }
+  to {
+    transform: translateX(4px);
+  }
+}

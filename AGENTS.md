@@ -112,6 +112,9 @@ The step-by-step version is the skill `.claude/skills/paddock-develop/SKILL.md`.
   then a widget. Presentation goes in `packages/ui` with no knowledge of Home Assistant.
 - **A new text** is added to `fr.ts` and `en.ts` with the same key. No hard-coded text in components.
 - **Styling** uses the tokens (`var(--pd-…)`) and CSS Modules. No inline colours, no new font.
+- **Animated backgrounds** (flames while heating, water line of the pool) are `packages/ui/src/components/Ambience`.
+  A new one follows its rules: only `transform` and `opacity` move, each on its own element (the wall tablet is slow),
+  and it is driven by a prop of the tile (`heating`, `pumping`), never by an entity.
 - **Optional screens stay optional.** Code must work when an optional block of the configuration is absent.
 - **The integration** is the only Python that runs in Home Assistant. It reads YAML 1.1, where the keys `on`
   and `off` become booleans: `_named_keys` restores them. Keep that in mind for any new setting name.

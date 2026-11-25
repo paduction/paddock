@@ -6,6 +6,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* host of the water background */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .label {

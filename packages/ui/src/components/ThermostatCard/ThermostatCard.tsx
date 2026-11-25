@@ -1,4 +1,5 @@
 import { useRef, type PointerEvent } from 'react'
+import { Flames } from '../Ambience/Ambience'
 import { Icon } from '../Icon/Icon'
 import { useStage } from '../Stage/Stage'
 import { bumpScale, useTween } from '../../hooks/useTween'
@@ -45,6 +46,7 @@ export function ThermostatCard(p: ThermostatCardProps) {
 
   return (
     <div className={p.heating && !p.off ? `${styles.card} ${styles.heating}` : styles.card}>
+      <Flames active={p.heating && !p.off} />
       <div className={styles.head}>
         <span className={styles.name}>{p.name}</span>
         <div className={styles.segments}>

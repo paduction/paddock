@@ -53,7 +53,8 @@ export function Shell() {
     <Stage theme={night ? 'dark' : theme} dimmed={night} onActivity={touched}>
       <Sidebar />
       <TopNav />
-      <main className={styles.content}>
+      {/* under the screensaver, the animated backgrounds of the page rest */}
+      <main className={styles.content} data-pd-still={saver || undefined}>
         <div key={view} className={styles.page}>
           {page}
         </div>

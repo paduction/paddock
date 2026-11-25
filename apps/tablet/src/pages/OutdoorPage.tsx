@@ -20,7 +20,7 @@ export function OutdoorPage() {
     <div className={styles.page}>
       <div className={styles.column}>
         <span className={styles.title}>{t('outdoor.pool')}</span>
-        <PoolCard label={t('outdoor.water')} temperature={pool === null ? '—' : decimal(shownPool)} />
+        <PoolCard label={t('outdoor.water')} temperature={pool === null ? '—' : decimal(shownPool)} pumping={!!cfg.poolDevice && stateOf(0)} />
         {cfg.poolDevice && (
           <div className={styles.pump}>
             <WithAutomations entity={cfg.poolDevice.entity} name={cfg.poolDevice.name} place="corner">
