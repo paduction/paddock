@@ -1,0 +1,66 @@
+.button {
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  text-align: left;
+  transition: background 0.25s;
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+.idle {
+  background: var(--pd-surface);
+  color: var(--pd-text);
+  --icon-bg: var(--pd-control);
+  --icon-ink: var(--pd-text);
+  --detail: var(--pd-text-2);
+}
+
+.done {
+  background: var(--pd-done);
+  color: var(--pd-text);
+  --icon-bg: var(--pd-green);
+  --icon-ink: #12261c;
+  --detail: var(--pd-done-sub);
+}
+
+.active {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+  --icon-bg: var(--pd-on-accent);
+  --icon-ink: var(--pd-accent);
+  --detail: #5c4712;
+}
+
+.iconCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--icon-bg);
+  color: var(--icon-ink);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.detail {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--detail);
+}

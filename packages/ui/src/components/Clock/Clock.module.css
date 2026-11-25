@@ -1,0 +1,13 @@
+.time {
+  font-size: 64px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.date {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--pd-text-2);
+  margin-top: 10px;
+}

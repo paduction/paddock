@@ -1,0 +1,99 @@
+.tile {
+  border-radius: var(--pd-radius-tile);
+  padding: 16px 18px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  transition: background 0.25s;
+}
+
+.tile:active {
+  transform: scale(0.97);
+}
+
+.on {
+  background: var(--pd-on);
+  --icon-bg: var(--pd-accent);
+  --icon-ink: var(--pd-on-accent);
+  --track: var(--pd-accent);
+  --knob: var(--pd-on-accent);
+  --knob-x: 20px;
+  --status: var(--pd-on-sub);
+}
+
+.off {
+  background: var(--pd-surface);
+  --icon-bg: var(--pd-control);
+  --icon-ink: var(--pd-text-2);
+  --track: var(--pd-track);
+  --knob: var(--pd-text-3);
+  --knob-x: 0px;
+  --status: var(--pd-text-2);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.iconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--icon-bg);
+  color: var(--icon-ink);
+  display: grid;
+  place-items: center;
+}
+
+.switch {
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--track);
+  padding: 4px;
+  box-sizing: border-box;
+  display: flex;
+  transition: background 0.2s;
+}
+
+.knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--knob);
+  transform: translateX(var(--knob-x));
+  transition: transform 0.26s var(--pd-ease-spring), background 0.2s;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--status);
+}
+
+/* Large variant */
+.large {
+  padding: 16px 18px 18px 16px;
+}
+
+.large .iconCircle {
+  width: 56px;
+  height: 56px;
+}
+
+.large .name {
+  font-size: 22px;
+}
+
+.large .status {
+  font-size: 14px;
+}

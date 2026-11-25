@@ -1,0 +1,38 @@
+.card {
+  flex: none;
+  border-radius: 28px;
+  background: var(--pd-summary);
+  padding: 22px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pd-accent-text);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.time {
+  margin-left: auto;
+  color: var(--pd-summary-meta);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 13px;
+}
+
+.text {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--pd-summary-text);
+  text-wrap: pretty;
+}

@@ -1,0 +1,39 @@
+.bar {
+  position: relative;
+  flex: none;
+  display: grid;
+  height: 52px;
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: var(--pd-surface);
+}
+
+.highlight {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 64px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--pd-accent);
+  transition: transform 0.38s var(--pd-ease-nav);
+}
+
+.tab {
+  position: relative;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: var(--pd-text-2);
+  transition: color 0.2s, transform 0.12s;
+}
+
+.tab:active {
+  transform: scale(0.9);
+}
+
+.active {
+  color: var(--pd-on-accent);
+}

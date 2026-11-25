@@ -1,0 +1,72 @@
+# Opens a film in Plex on an Apple TV. Add it to Home Assistant (Settings → Automations & scenes → Scripts →
+# Add script → Edit in YAML) and name it so that its entity id matches `movies.playScript` in paddock.yaml,
+# e.g. script.paddock_plex_play.
+#
+# Paddock calls it with:
+#   title    the film
+#   library  the Plex library it is in
+#   resume   true to continue where it stopped
+#   tv       the TV's media player (movies.tvs[].media)
+#   room     the word that identifies the TV's Plex player (movies.tvs[].plexKeyword)
+#
+# It turns the Apple TV on and opens the Plex app. If Home Assistant's Plex integration sees a Plex player
+# on that TV, it also starts the film; otherwise the Plex app is open and you pick the film with the remote.
+alias: "Paddock: open Plex on a TV"
+mode: restart
+icon: mdi:plex
+fields:
+  title:
+    name: Title
+    required: false
+    selector: { text: {} }
+  library:
+    name: Library
+    default: Films
+    selector: { text: {} }
+  resume:
+    name: Resume
+    default: false
+    selector: { boolean: {} }
+  tv:
+    name: TV
+    selector: { entity: { domain: media_player } }
+  room:
+    name: Word in the name of the TV's Plex player
+    default: ""
+    selector: { text: {} }
+sequence:
+  - action: media_player.turn_on
+    target: { entity_id: "{{ tv }}" }
+  - wait_template: "{{ not is_state(tv, 'off') }}"
+    timeout: { seconds: 15 }
+    continue_on_timeout: true
+  - action: media_player.select_source
+    continue_on_error: true
+    target: { entity_id: "{{ tv }}" }
+    data: { source: Plex }
+  # wait for the Plex player whose name contains `room`
+  - wait_template: >-
+      {{ integration_entities('plex') | select('match', 'media_player\.') | reject('is_state', 'unavailable')
+         | map('state_attr', 'friendly_name') | select('string') | map('lower') | select('search', room | lower) | list | count > 0 }}
+    timeout: { seconds: 8 }
+    continue_on_timeout: true
+  - if:
+      - condition: template
+        value_template: >-
+          {{ title is defined and title != ''
+             and (integration_entities('plex') | select('match', 'media_player\.') | reject('is_state', 'unavailable') | list | count > 0) }}
+    then:
+      - variables:
+          players: "{{ integration_entities('plex') | select('match', 'media_player\\.') | reject('is_state', 'unavailable') | list }}"
+      - variables:
+          client: >-
+            {% set r = namespace(match=none) %}
+            {% for p in players %}
+              {% if r.match is none and (room | lower) in ((state_attr(p, 'friendly_name') or '') | lower) %}{% set r.match = p %}{% endif %}
+            {% endfor %}
+            {{ r.match or (players | first) }}
+      - action: media_player.play_media
+        target: { entity_id: "{{ client }}" }
+        data:
+          media_content_type: movie
+          media_content_id: "{{ {'library_name': library, 'title': title, 'resume': resume} | to_json }}"

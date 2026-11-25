@@ -1,0 +1,25 @@
+.viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--pd-page);
+}
+
+.stage {
+  position: absolute;
+  height: 800px;
+  transform-origin: 0 0;
+  flex: none;
+  background: var(--pd-bg);
+  color: var(--pd-text);
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  transition: filter 0.6s ease;
+}
+
+/* A full-screen video is open over everything: the stage underneath is not painted */
+.viewport[data-video] > .stage {
+  visibility: hidden;
+}

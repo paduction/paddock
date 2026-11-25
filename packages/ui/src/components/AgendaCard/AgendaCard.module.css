@@ -1,0 +1,126 @@
+.next {
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  border-radius: 20px;
+  background: var(--pd-bg);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: transform 0.12s;
+}
+
+.next:active {
+  transform: scale(0.97);
+}
+
+.nextHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.when {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--pd-accent-text);
+  white-space: nowrap;
+}
+
+.avatars {
+  display: flex;
+}
+
+.avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  box-sizing: border-box;
+  border: 2px solid var(--pd-bg);
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.avatar + .avatar {
+  margin-left: -6px;
+}
+
+.title,
+.meta {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.meta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  padding: 0 4px;
+  border-radius: 10px;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.row:active {
+  background: var(--pd-bg);
+}
+
+.rowWhen {
+  width: 40px;
+  flex: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+}
+
+.dots {
+  display: flex;
+  gap: 3px;
+  flex: none;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--dot);
+}
+
+.rowTitle {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Person colors, in person order */
+.tone0 { background: var(--pd-on-2); color: var(--pd-accent-text); --dot: var(--pd-accent); }
+.tone1 { background: var(--pd-pool); color: var(--pd-blue-text); --dot: var(--pd-blue); }
+.tone2 { background: var(--pd-avatar); color: var(--pd-green-text); --dot: var(--pd-green); }
+.tone3 { background: var(--pd-alert-chip); color: var(--pd-coral-text); --dot: var(--pd-coral); }
+.dot.tone0, .dot.tone1, .dot.tone2, .dot.tone3 { background: var(--dot); }

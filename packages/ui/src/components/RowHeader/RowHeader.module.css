@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding-left: 4px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.subtitle,
+.highlight {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.highlight {
+  color: var(--pd-accent-text);
+}

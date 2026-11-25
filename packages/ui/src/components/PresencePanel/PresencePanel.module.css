@@ -1,0 +1,73 @@
+.panel {
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation-duration: 0.28s;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px 6px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.summary {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px 10px 10px;
+  border-radius: 20px;
+  background: var(--pd-surface);
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  font-weight: 800;
+  background: var(--avatar-bg);
+  color: var(--avatar-ink);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.status,
+.icon {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sub);
+}
+
+.icon {
+  flex: none;
+}
+
+.home { --avatar-bg: var(--pd-avatar); --avatar-ink: var(--pd-green-text); --sub: var(--pd-green-text); }
+.away { --avatar-bg: var(--pd-control); --avatar-ink: var(--pd-text-2); --sub: var(--pd-text-2); }
+.untracked { --avatar-bg: var(--pd-control); --avatar-ink: var(--pd-text-3); --sub: var(--pd-text-3); opacity: 0.75; }

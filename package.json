@@ -1,0 +1,23 @@
+{
+  "name": "paddock",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @paddock/tablet dev",
+    "build": "pnpm --filter @paddock/tablet build",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "deploy": "pnpm build && ./tools/deploy.sh",
+    "config:export": "tsx tools/config-export.ts",
+    "config:check": "tsx tools/config-check.ts",
+    "discover": "tsx tools/discover.ts",
+    "desktop:dev": "pnpm --filter @paddock/desktop dev",
+    "desktop:build": "pnpm --filter @paddock/desktop build"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "devDependencies": {
+    "tsx": "^4.23.15",
+    "yaml": "^2.9.1"
+  }
+}

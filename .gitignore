@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.local.*
+.DS_Store
+
+# home settings and secrets
+paddock.yaml
+__pycache__/
+
+# private
+.env

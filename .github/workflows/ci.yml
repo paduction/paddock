@@ -1,0 +1,37 @@
+# Checks every push: the app (types, rules, build, example configuration) and the Home Assistant integration.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm config:check --example
+      - name: paddock.example.yaml is up to date
+        run: pnpm config:export --example && git diff --exit-code paddock.example.yaml
+      - run: pnpm build
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Home Assistant's own checks
+        uses: home-assistant/actions/hassfest@master
+      - name: HACS checks
+        uses: hacs/action@main
+        with:
+          category: integration
+          ignore: brands

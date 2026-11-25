@@ -1,0 +1,237 @@
+.panel {
+  min-height: 0;
+  border-radius: 30px;
+  background: var(--pd-sunk);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 8px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--pd-surface);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--pd-text-3);
+}
+
+.online .dot { background: var(--pd-green); }
+.online { color: var(--pd-green-text); }
+.away .dot { background: var(--pd-accent); }
+.standby .dot { background: var(--pd-coral); }
+.standby { color: var(--pd-coral-text); }
+
+/* Game */
+.hero {
+  flex: 1;
+  text-align: left;
+  color: inherit;
+  transition: transform 0.12s;
+  min-height: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--pd-surface);
+  display: flex;
+  flex-direction: column;
+}
+
+.art {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 20%, var(--pd-control), var(--pd-surface) 70%);
+}
+
+.shade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, var(--pd-surface));
+}
+
+.info {
+  padding: 4px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.game {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Account */
+.account {
+  flex: none;
+  border-radius: 20px;
+  background: var(--pd-surface);
+  padding: 12px 16px 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--pd-control);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.accountText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.accountName {
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.accountDetail {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Power */
+.power {
+  flex: none;
+  height: 64px;
+  border-radius: 20px;
+  background: var(--pd-surface);
+  color: var(--pd-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  transition: background 0.2s, transform 0.12s;
+}
+
+.power:active {
+  transform: scale(0.98);
+}
+
+.powerPrimary {
+  background: var(--pd-text);
+  color: var(--pd-bg);
+}
+
+.hero:active {
+  transform: scale(0.99);
+}
+
+.more {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+}
+
+.detail {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.score {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  font-weight: 800;
+  color: #1c1916;
+}
+
+.good { background: var(--pd-green); }
+.mixed { background: var(--pd-accent); }
+.bad { background: var(--pd-coral); }

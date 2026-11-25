@@ -1,0 +1,64 @@
+.chip {
+  flex: none;
+  height: 52px;
+  padding: 0 18px 0 5px;
+  border-radius: 999px;
+  background: var(--pd-surface);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.12s;
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+.avatars {
+  display: flex;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 3px solid var(--pd-surface);
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.avatar + .avatar {
+  margin-left: -11px;
+}
+
+.home {
+  background: var(--pd-avatar);
+  color: var(--pd-green-text);
+}
+
+.away {
+  background: var(--pd-control);
+  color: var(--pd-text-3);
+  opacity: 0.55;
+}
+
+.untracked {
+  background: var(--pd-control);
+  color: var(--pd-text-3);
+  opacity: 0.35;
+}
+
+.label,
+.labelHome {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+  white-space: nowrap;
+}
+
+.labelHome {
+  color: var(--pd-green-text);
+}

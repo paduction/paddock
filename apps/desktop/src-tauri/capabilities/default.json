@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "The Paddock window: its own two commands, nothing from the system",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

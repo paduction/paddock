@@ -1,0 +1,121 @@
+.card {
+  flex: none;
+  border-radius: 24px;
+  background: var(--pd-surface);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+  transition: background 0.25s;
+  --icon-bg: var(--pd-control);
+  --icon-ink: var(--pd-text-2);
+  --track: var(--pd-track);
+  --knob: var(--pd-text-3);
+  --knob-x: 0px;
+}
+
+.card:active {
+  transform: scale(0.97);
+}
+
+.on {
+  background: var(--pd-on);
+  --icon-bg: var(--pd-accent);
+  --icon-ink: var(--pd-on-accent);
+  --track: var(--pd-accent);
+  --knob: var(--pd-on-accent);
+  --knob-x: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.iconCircle {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--icon-bg);
+  color: var(--icon-ink);
+  display: grid;
+  place-items: center;
+  transition: background 0.25s;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.switch {
+  width: 48px;
+  height: 28px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--track);
+  padding: 4px;
+  box-sizing: border-box;
+  display: flex;
+  transition: background 0.2s;
+}
+
+.knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--knob);
+  transform: translateX(var(--knob-x));
+  transition: transform 0.26s var(--pd-ease-spring), background 0.2s;
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.chip {
+  height: 40px;
+  border-radius: 14px;
+  background: var(--pd-control);
+  color: var(--pd-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 0.25s;
+}
+
+.chipCurrent {
+  background: var(--pd-on-2);
+  color: var(--pd-accent-text);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  transition: background 0.25s;
+}
+
+.dot_off { background: var(--pd-text-3); }
+.dot_on { background: var(--pd-green); }
+.dot_pending { background: var(--pd-accent); }

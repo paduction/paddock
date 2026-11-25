@@ -1,0 +1,25 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Paddock",
+        "description": "Transmet les réglages de la tablette murale (paddock.yaml, à côté de configuration.yaml) uniquement aux appareils connectés."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Paddock est déjà configuré."
+    }
+  },
+  "services": {
+    "assign_account": {
+      "name": "Attribuer un compte à la tablette",
+      "description": "Fait passer une tablette Paddock connectée avec un jeton administrateur sur un utilisateur sans droits d'administrateur. La tablette bascule toute seule dans les 10 minutes ; supprime ensuite son ancien jeton dans ton profil.",
+      "fields": {
+        "user": {
+          "name": "Utilisateur",
+          "description": "Nom d'un utilisateur Home Assistant sans droits d'administrateur."
+        }
+      }
+    }
+  }
+}

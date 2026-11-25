@@ -1,0 +1,44 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding-left: 4px;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.summary {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.controls {
+  display: flex;
+  gap: 4px;
+}
+
+.round {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--pd-surface);
+  display: grid;
+  place-items: center;
+}
+
+.round:active {
+  background: var(--pd-control-press);
+  transform: scale(0.92);
+}

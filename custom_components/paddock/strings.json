@@ -1,0 +1,25 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Paddock",
+        "description": "Serves your wall tablet settings (paddock.yaml, next to configuration.yaml) to signed-in devices only."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Paddock is already set up."
+    }
+  },
+  "services": {
+    "assign_account": {
+      "name": "Assign an account to the tablet",
+      "description": "Moves a Paddock tablet signed in with an administrator token to a user without administrator rights. The tablet switches by itself within 10 minutes; then delete its old token in your profile.",
+      "fields": {
+        "user": {
+          "name": "User",
+          "description": "Name of a Home Assistant user without administrator rights."
+        }
+      }
+    }
+  }
+}

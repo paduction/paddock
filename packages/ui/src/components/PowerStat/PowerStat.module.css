@@ -1,0 +1,42 @@
+.card {
+  flex: 1;
+  border-radius: 28px;
+  background: var(--pd-surface);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.big {
+  font-size: 36px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.unit {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.detail {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}

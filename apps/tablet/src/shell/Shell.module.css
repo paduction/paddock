@@ -1,0 +1,25 @@
+/* Layout of the 800 px high stage: sidebar 280 px, content from 304 px */
+.nav {
+  position: absolute;
+  top: 0;
+  left: 304px;
+  right: 24px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.content {
+  position: absolute;
+  top: 100px;
+  left: 304px;
+  right: 24px;
+  bottom: 24px;
+}
+
+.page {
+  height: 100%;
+  animation: pd-in 0.32s var(--pd-ease-out) both;
+}

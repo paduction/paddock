@@ -1,0 +1,137 @@
+.card {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  border-radius: 24px;
+  background: var(--pd-surface);
+  padding: 14px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 6px 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.label {
+  color: var(--pd-text-2);
+  white-space: nowrap;
+}
+
+.action {
+  min-width: 0;
+  height: 34px;
+  padding: 0 8px 0 14px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  color: var(--pd-accent-text);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action:active {
+  transform: scale(0.96);
+}
+
+.actionText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item {
+  flex: none;
+  height: 60px;
+  border-radius: 18px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px 0 8px;
+  text-align: left;
+  transition: background 0.2s;
+  --art-bg: var(--pd-control);
+  --art-ink: var(--pd-text-2);
+  --dur: var(--pd-text-3);
+}
+
+.item:active {
+  transform: scale(0.97);
+}
+
+.current {
+  background: var(--pd-on);
+  --art-bg: var(--pd-accent);
+  --art-ink: var(--pd-on-accent);
+  --dur: var(--pd-accent-text);
+}
+
+.art {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 12px;
+  background: var(--art-bg);
+  color: var(--art-ink);
+  display: grid;
+  place-items: center;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spin {
+  animation: pd-spin 1s linear infinite;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.title,
+.subtitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.duration {
+  flex: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dur);
+}

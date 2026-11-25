@@ -1,0 +1,122 @@
+.card {
+  border-radius: 24px;
+  background: var(--pd-surface);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.media {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.art {
+  width: 80px;
+  height: 80px;
+  flex: none;
+  border-radius: 16px;
+  background: repeating-linear-gradient(135deg, var(--pd-control) 0 6px, var(--pd-stripe) 6px 12px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text {
+  min-width: 0;
+}
+
+.state {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 19px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.round,
+.small {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  display: grid;
+  place-items: center;
+}
+
+.small {
+  width: 48px;
+  height: 48px;
+}
+
+.round:active,
+.small:active {
+  background: var(--pd-control-press);
+  transform: scale(0.92);
+}
+
+.play {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+  display: grid;
+  place-items: center;
+}
+
+.play:active {
+  transform: scale(0.92);
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.track {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--pd-bar);
+}
+
+.level {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--pd-text);
+}
+
+.number {
+  width: 26px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+}

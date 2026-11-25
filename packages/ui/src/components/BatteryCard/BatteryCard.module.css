@@ -1,0 +1,61 @@
+.card {
+  border-radius: 28px;
+  background: var(--pd-surface);
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.big {
+  font-size: 54px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.unit {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.note {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+  margin-top: 6px;
+}
+
+.bar {
+  height: 14px;
+  border-radius: 999px;
+  background: var(--pd-bar);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--pd-green);
+}
+
+.percent {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 8px;
+}

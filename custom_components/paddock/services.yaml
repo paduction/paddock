@@ -1,0 +1,7 @@
+assign_account:
+  fields:
+    user:
+      required: true
+      example: Tablette
+      selector:
+        text:

@@ -1,0 +1,257 @@
+.card {
+  border-radius: 30px;
+  background: var(--pd-surface);
+  padding: 24px 26px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+  min-width: 0;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.source {
+  height: 40px;
+  padding: 0 16px 0 12px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  color: var(--pd-text-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.25s, color 0.25s;
+}
+
+.sourceOn {
+  background: var(--pd-on-2);
+  color: var(--pd-accent-text);
+}
+
+.counter {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+  white-space: nowrap;
+}
+
+.now {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+.art {
+  width: 232px;
+  height: 232px;
+  flex: none;
+  border-radius: 24px;
+  background: repeating-linear-gradient(135deg, var(--pd-control) 0 8px, var(--pd-stripe) 8px 16px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 4px;
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.spin {
+  animation: pd-spin 1s linear infinite;
+}
+
+.title {
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.artist {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.album {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.seek {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.seekTrack {
+  position: relative;
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--pd-bar);
+  transition: height 0.18s;
+}
+
+.seekFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: var(--pd-accent);
+}
+
+.seekKnob {
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 999px;
+  background: var(--pd-text);
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--pd-text-2);
+  display: grid;
+  place-items: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.toggleOn {
+  background: var(--pd-on-2);
+  color: var(--pd-accent-text);
+}
+
+.toggle:active,
+.play:active {
+  transform: scale(0.92);
+}
+
+.skip {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  display: grid;
+  place-items: center;
+}
+
+.skip:active,
+.volButton:active {
+  background: var(--pd-control-press);
+  transform: scale(0.92);
+}
+
+.play {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+  display: grid;
+  place-items: center;
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.volButton {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--pd-control);
+  display: grid;
+  place-items: center;
+}
+
+.volArea {
+  flex: 1;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.volTrack {
+  position: relative;
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--pd-bar);
+  transition: height 0.18s;
+}
+
+.volFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: var(--pd-text);
+}
+
+.volNumber {
+  width: 32px;
+  text-align: right;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 700;
+  transform-origin: 100% 50%;
+}

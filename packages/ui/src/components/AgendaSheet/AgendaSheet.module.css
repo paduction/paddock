@@ -1,0 +1,178 @@
+.panel {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.list {
+  background: var(--pd-sunk);
+  padding: 24px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+
+.group {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+  padding: 0 12px 8px;
+}
+
+.groupLater {
+  padding: 16px 12px 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  flex: none;
+  padding: 0 12px;
+  border-radius: 16px;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.row:active {
+  transform: scale(0.98);
+}
+
+.rowWhen {
+  width: 64px;
+  flex: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+  white-space: nowrap;
+}
+
+.dots {
+  display: flex;
+  gap: 3px;
+  flex: none;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.rowTitle {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.source {
+  margin-top: auto;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.detail {
+  padding: 28px 28px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.detailHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.detailTitles {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.when {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 54px;
+}
+
+.infoIcon {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--pd-surface);
+  display: grid;
+  place-items: center;
+}
+
+.infoText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.infoMain {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.infoSub {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.notes {
+  border-radius: 20px;
+  background: var(--pd-surface);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notesTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+}
+
+.notesText {
+  font-size: 15px;
+  font-weight: 600;
+  text-wrap: pretty;
+}

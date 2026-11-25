@@ -1,0 +1,14 @@
+# Paddock · plex-info — read-only view of your Plex library for the Films screen.
+#   cp .env.example .env   then put your Plex address and token in .env (never commit it)
+#   docker compose up -d
+services:
+  paddock-plex-info:
+    image: python:3.12-slim
+    container_name: paddock-plex-info
+    restart: unless-stopped
+    ports:
+      - "8098:8098"
+    env_file: .env
+    volumes:
+      - ./app.py:/app/app.py:ro
+    command: ["python", "-u", "/app/app.py"]

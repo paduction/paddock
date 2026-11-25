@@ -1,0 +1,12 @@
+.target {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.targetLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #b8afa4;
+}

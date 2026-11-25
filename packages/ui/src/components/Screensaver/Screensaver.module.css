@@ -1,0 +1,71 @@
+.saver {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: #0c0a08;
+  cursor: pointer;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 3s ease;
+}
+
+.time {
+  font-size: 210px;
+  font-weight: 200;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: #d6cec3;
+}
+
+.date {
+  font-size: 28px;
+  font-weight: 500;
+  color: #958c81;
+  margin-top: 10px;
+}
+
+.weather {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 30px;
+  color: #958c81;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--pd-away);
+}
+
+.summary {
+  margin: 36px 0 0;
+  max-width: 720px;
+  text-align: center;
+  font-size: 21px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: #7d756b;
+  text-wrap: pretty;
+}
+
+.hint {
+  position: absolute;
+  bottom: 26px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5a524a;
+}

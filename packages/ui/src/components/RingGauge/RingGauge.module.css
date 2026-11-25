@@ -1,0 +1,66 @@
+.card {
+  border-radius: 28px;
+  background: var(--pd-surface);
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  align-self: flex-start;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ring {
+  position: relative;
+  width: 170px;
+  height: 170px;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+}
+
+.track,
+.value {
+  fill: none;
+  stroke-width: 12px;
+  stroke-linecap: round;
+  transform: rotate(135deg);
+  transform-origin: 85px 85px;
+}
+
+.track {
+  stroke: var(--pd-bar);
+  stroke-dasharray: 339.3 452.4;
+}
+
+.value {
+  stroke: var(--pd-accent);
+}
+
+.number {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.big {
+  font-size: 54px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.unit {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--pd-text-2);
+  margin-top: -14px;
+}

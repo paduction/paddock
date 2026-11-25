@@ -1,0 +1,43 @@
+.panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  background: var(--pd-panel);
+  border-right: 1px solid var(--pd-panel-line);
+  color: var(--pd-text);
+  padding: 30px 28px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.divider {
+  height: 1px;
+  background: var(--pd-line-panel);
+}
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.headingTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.headingAside {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+}

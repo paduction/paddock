@@ -1,0 +1,59 @@
+.track {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--pd-seg);
+  border-radius: 999px;
+}
+
+.overlay {
+  background: rgba(23, 21, 18, 0.85);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--pd-text-2);
+  white-space: nowrap;
+}
+
+.sm {
+  height: 40px;
+}
+
+.option:active {
+  transform: scale(0.96);
+}
+
+.active {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+}
+
+.compact {
+  padding: 0 16px;
+  gap: 6px;
+}
+
+.colored {
+  color: #1c1916;
+}
+
+.stretch .option {
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+.stretch .compact {
+  padding: 0 4px;
+  gap: 5px;
+}

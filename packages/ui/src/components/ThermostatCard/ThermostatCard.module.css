@@ -1,0 +1,237 @@
+.card {
+  border-radius: 28px;
+  background: var(--pd-surface);
+  padding: 20px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 0;
+  transition: background 0.4s, box-shadow 0.4s;
+}
+
+/* The heater is running (costly): warm background and outline, so it shows from across the room. */
+.heating {
+  background: var(--pd-heat);
+  box-shadow: inset 0 0 0 2px var(--pd-heat-line);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.segments {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--pd-seg);
+  border-radius: 999px;
+}
+
+.segment {
+  height: 44px;
+  min-width: 48px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--pd-text-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.segment:active {
+  transform: scale(0.95);
+}
+
+.segmentOn {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+}
+
+.segmentOff {
+  background: var(--pd-track);
+  color: var(--pd-text);
+}
+
+.middle {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.readout {
+  display: flex;
+  flex-direction: column;
+}
+
+.currentRow {
+  display: flex;
+  align-items: flex-start;
+}
+
+.current {
+  font-size: 92px;
+  font-weight: 300;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+.degree {
+  font-size: 34px;
+  font-weight: 300;
+  color: var(--pd-text-2);
+}
+
+.status {
+  color: var(--pd-text-3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.statusHeating {
+  color: var(--pd-coral-text);
+}
+
+.statusHeating > :first-child {
+  animation: pd-pulse 2.4s ease-in-out infinite;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.round {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  display: grid;
+  place-items: center;
+}
+
+.round:active {
+  background: var(--pd-control-press);
+  transform: scale(0.92);
+}
+
+.setpoint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.setValue {
+  display: inline-block;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.setCaption {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+}
+
+/* Ruler */
+.ruler {
+  position: relative;
+  touch-action: none;
+  cursor: pointer;
+  padding-top: 4px;
+}
+
+.ticks {
+  height: 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.tick {
+  width: 2px;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+
+.targetMark {
+  position: absolute;
+  bottom: -2px;
+  width: 4px;
+  height: 50px;
+  margin-left: -2px;
+  border-radius: 4px;
+  background: var(--pd-accent);
+}
+
+.currentMark {
+  position: absolute;
+  top: -6px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 999px;
+  background: var(--pd-text);
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+/* Presets */
+.presets {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background: var(--pd-seg);
+  border-radius: 22px;
+}
+
+.preset {
+  flex: 1;
+  min-width: 0;
+  height: 56px;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--pd-text-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+.preset:active {
+  transform: scale(0.96);
+}
+
+.presetOn {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+}

@@ -1,0 +1,148 @@
+import type { PaddockConfig } from '@paddock/core'
+
+/**
+ * Example configuration (fictional home): what the app shows before it is signed in,
+ * and the source of paddock.example.yaml (`pnpm config:export --example`).
+ * Your own home goes in paddock.yaml, in Home Assistant — never in this repository.
+ */
+export const config: PaddockConfig = {
+  locale: 'en',
+  idleMinutes: 2,
+  home: {
+    summary: 'input_text.daily_summary',
+    climate: { entity: 'climate.office', name: 'Office heating' },
+    gate: { entity: 'cover.garage_door', name: 'Garage door', alertAfterMinutes: 10 },
+    cinema: {
+      toggle: 'input_boolean.cinema_mode',
+      dimLights: ['living', 'tv'],
+      screen: { down: 'script.screen_down', up: 'script.screen_up' },
+      projector: { on: 'script.projector_on', off: 'script.projector_off' },
+      amplifier: 'switch.amplifier',
+      player: { name: 'Living room', media: 'media_player.apple_tv', remote: 'remote.apple_tv' },
+    },
+    alerts: {
+      batteries: ['sensor.door_sensor_battery'],
+      batteryLow: 10,
+    },
+  },
+  covers: [
+    { id: 'living', entity: 'cover.living_room', name: 'Window', group: 'Living room' },
+    { id: 'bedroom', entity: 'cover.bedroom', name: 'Window', group: 'Bedroom' },
+  ],
+  movies: {
+    server: 'http://homeassistant.local:8098',
+    playScript: 'script.plex_play',
+    tvs: [{ media: 'media_player.apple_tv', remote: 'remote.apple_tv', name: 'Living room', plexKeyword: 'living', where: 'in the living room', remoteTitle: 'Living room Apple TV' }],
+  },
+  music: {
+    player: 'media_player.living_room',
+    speakers: [{ entity: 'media_player.living_room', name: 'Living room' }, { entity: 'media_player.kitchen', name: 'Kitchen' }],
+    playlist: 'Favourites',
+  },
+  energy: {
+    battery: 'sensor.battery_energy',
+    batteryCapacityKwh: 10,
+    solar: 'sensor.solar_energy',
+    grid: 'sensor.grid_import_energy',
+    green: 'sensor.solar_self_consumed_energy',
+    discharge: 'sensor.battery_discharge_energy',
+    charge: 'sensor.battery_charge_energy',
+  },
+  outdoor: {
+    pool: 'sensor.pool_temperature',
+    poolDevice: { entity: 'switch.pool_pump', name: 'Pump', icon: 'valve', on: 'Filtering', off: 'Stopped' },
+    devices: [{ entity: 'switch.garden_lights', name: 'Garden lights', icon: 'park', on: 'On', off: 'Off' }],
+  },
+  cleaning: {
+    robots: [
+      {
+        entity: 'vacuum.robot',
+        name: 'House',
+        model: 'Robot vacuum',
+        mode: 'select.robot_cleaning_mode',
+        // Optional: show the modes as "what × intensity" (option names come from your select entity)
+        modes: {
+          kinds: [
+            { id: 'vac', label: 'Vacuum', icon: 'mode_fan' },
+            { id: 'mop', label: 'Mop', icon: 'water_drop' },
+            { id: 'both', label: 'Both', icon: 'auto_awesome' },
+          ],
+          levels: [
+            { id: 'normal', label: 'Normal', icon: 'adjust' },
+            { id: 'deep', label: 'Deep', icon: 'local_fire_department' },
+          ],
+          options: {
+            vac: { normal: 'Vacuum', deep: 'Vacuum Deep' },
+            mop: { normal: 'Mop', deep: 'Mop Deep' },
+            both: { normal: 'Vacuum And Mop', deep: 'Vacuum And Mop Deep' },
+          },
+          default: { kind: 'both', level: 'normal' },
+        },
+        rooms: [
+          { area: 'living_room', name: 'Living room' },
+          { area: 'kitchen', name: 'Kitchen' },
+          { area: 'bedroom', name: 'Bedroom' },
+          { area: 'bathroom', name: 'Bathroom' },
+        ],
+        // Optional: group the rooms (handy when there are many)
+        zones: [
+          { id: 'living', name: 'Living areas', icon: 'weekend', rooms: ['living_room', 'kitchen'] },
+          { id: 'night', name: 'Night', icon: 'bed', rooms: ['bedroom', 'bathroom'] },
+        ],
+      },
+    ],
+  },
+  // Game console: PlayStation Network integration (game, account) + optional power switch (e.g. the ps5-mqtt add-on)
+  gaming: {
+    name: 'PS5',
+    console: 'media_player.playstation_5',
+    account: {
+      status: 'sensor.my_psn_id_online_status',
+      lastOnline: 'sensor.my_psn_id_last_online',
+      nowPlaying: 'sensor.my_psn_id_now_playing',
+      trophyLevel: 'sensor.my_psn_id_trophy_level',
+      onlineId: 'sensor.my_psn_id_online_id',
+      avatar: 'image.my_psn_id_avatar',
+    },
+    power: 'switch.ps5_power',
+    // Sound of the wall tablet while a trailer plays (Fully Kiosk media player), muted again after
+    trailerSound: { player: 'media_player.wall_tablet', volume: 50, restore: 0 },
+  },
+  cameras: {
+    list: [
+      { entity: 'camera.front_door', name: 'Front door', person: 'binary_sensor.front_door_person' },
+      { entity: 'camera.garden', name: 'Garden' },
+    ],
+    doorbell: { event: 'event.front_door_ring', camera: 'camera.front_door' },
+  },
+  lighting: {
+    rows: [{ type: 'room', room: 'Living room' }, { type: 'room', room: 'Office' }, { type: 'scenes' }, { type: 'room', room: 'Other' }],
+    lights: [
+      { id: 'living', entity: 'light.living_room', name: 'Living room', room: 'Living room', icon: 'light' },
+      { id: 'tv', entity: 'light.tv', name: 'TV backlight', room: 'Living room', icon: 'tv' },
+      { id: 'desk', entity: 'light.desk', name: 'Desk lamp', room: 'Office', icon: 'table_lamp' },
+      { id: 'shelf', entity: 'light.shelf', name: 'Shelf', room: 'Office', icon: 'wb_iridescent' },
+      { id: 'pantry', entity: 'light.pantry', name: 'Pantry', room: 'Other', icon: 'lightbulb', presence: 'binary_sensor.pantry_occupancy' },
+    ],
+    scenes: [
+      { id: 'relax', entity: 'scene.relax', name: 'Relax', icon: 'wb_twilight' },
+      { id: 'focus', entity: 'scene.focus', name: 'Focus', icon: 'landscape' },
+    ],
+  },
+  people: [
+    { name: 'Alex', entity: 'person.alex' },
+    { name: 'Sam', entity: 'person.sam' },
+  ],
+  calendars: [{ entity: 'calendar.family', name: 'Family' }],
+  sidebar: {
+    weather: 'weather.home',
+    sun: 'sun.sun',
+    outdoorTemperature: 'sensor.outdoor_temperature',
+    outdoorHumidity: 'sensor.outdoor_humidity',
+    indoor: [
+      { label: 'House', icon: 'home', tone: 'accent', temperature: 'sensor.living_room_temperature', humidity: 'sensor.living_room_humidity' },
+      { label: 'Office', icon: 'desk', tone: 'blue', temperature: 'sensor.office_temperature', humidity: 'sensor.office_humidity' },
+    ],
+    pool: 'sensor.pool_temperature',
+  },
+}

@@ -1,0 +1,118 @@
+.player {
+  border-radius: 20px;
+  background: var(--pd-bg);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  animation: pd-in 0.3s var(--pd-ease-out) both;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.art {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--pd-control);
+  display: grid;
+  place-items: center;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.title,
+.artist {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.artist {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.close {
+  flex: none;
+  align-self: flex-start;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  color: var(--pd-text-2);
+  display: grid;
+  place-items: center;
+}
+
+.close:active,
+.play:active {
+  transform: scale(0.9);
+}
+
+.play {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+  display: grid;
+  place-items: center;
+}
+
+.progress {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bar {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--pd-bar);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: var(--pd-accent);
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+}

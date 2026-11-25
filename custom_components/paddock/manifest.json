@@ -1,0 +1,14 @@
+{
+  "domain": "paddock",
+  "name": "Paddock",
+  "codeowners": ["@paduction"],
+  "config_flow": true,
+  "dependencies": ["websocket_api"],
+  "documentation": "https://github.com/paduction/paddock",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/paduction/paddock/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.3.0"
+}

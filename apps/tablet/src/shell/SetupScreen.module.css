@@ -1,0 +1,61 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(11, 10, 8, 0.92);
+  user-select: text;
+}
+
+.card {
+  width: min(460px, calc(100% - 40px));
+  box-sizing: border-box;
+  background: #1c1916;
+  border-radius: 32px;
+  padding: 30px;
+  color: #f4efe8;
+}
+
+.card h2 { margin: 0 0 6px; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.card p { margin: 0 0 18px; font-size: 14px; line-height: 1.5; color: #b8afa4; }
+.card label { display: block; margin: 14px 0 6px; font-size: 13px; font-weight: 700; color: #8c8379; }
+
+.card input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 0;
+  background: #26221e;
+  color: #f4efe8;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  outline: none;
+}
+
+.card input:focus { box-shadow: 0 0 0 2px #f5c451; }
+
+.card button {
+  margin-top: 22px;
+  width: 100%;
+  height: 56px;
+  border-radius: 999px;
+  background: #f5c451;
+  color: #2a2008;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.message {
+  min-height: 20px;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f07a4a;
+  text-align: center;
+  /* several lines when paddock.yaml has mistakes */
+  white-space: pre-line;
+}

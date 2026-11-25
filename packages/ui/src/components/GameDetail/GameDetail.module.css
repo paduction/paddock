@@ -1,0 +1,238 @@
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 28px;
+  padding: 24px;
+}
+
+/* Left: media + description */
+.left {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.viewer {
+  flex: none;
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 20%, var(--pd-control), var(--pd-surface) 70%);
+  display: grid;
+  place-items: center;
+}
+
+.image,
+.frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  display: block;
+}
+
+.strip {
+  flex: none;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  /* room for the press effect, which the scrolling strip would otherwise cut */
+  padding: 4px;
+  margin: -4px;
+}
+
+.thumb {
+  position: relative;
+  transform-origin: center;
+  flex: none;
+  width: 112px;
+  height: 64px;
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--pd-surface);
+  transition: box-shadow 0.15s, transform 0.12s;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb:active {
+  transform: scale(0.95);
+}
+
+/* Selection drawn inside the thumbnail: never clipped by the strip */
+.thumbOn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--pd-accent);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.about {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.blockTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+}
+
+.description {
+  margin: 0;
+  overflow-y: auto;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--pd-text);
+}
+
+/* Right: identity and facts */
+.right {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pd-accent-text);
+}
+
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.scoreBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 4px;
+}
+
+.score {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1c1916;
+}
+
+.good { background: var(--pd-green); }
+.mixed { background: var(--pd-accent); }
+.bad { background: var(--pd-coral); }
+
+.scoreLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: var(--pd-surface);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+}
+
+.facts {
+  flex: 1;
+  min-height: 0;
+  margin-top: 6px;
+  border-radius: 22px;
+  background: var(--pd-sunk);
+  padding: 6px 18px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--pd-line);
+}
+
+.fact:last-child {
+  border-bottom: 0;
+}
+
+.factLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+}
+
+.factValue {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.source {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.source a {
+  color: inherit;
+  text-decoration: underline;
+}
+

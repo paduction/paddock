@@ -1,0 +1,230 @@
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+.panel {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.ranges {
+  margin-left: auto;
+}
+
+.ranges > div {
+  background: var(--pd-surface);
+}
+
+.ranges button {
+  padding: 0 22px;
+  transition: background 0.25s, color 0.25s;
+}
+
+.cards {
+  display: flex;
+  gap: 12px;
+}
+
+.card {
+  flex: 1;
+  min-width: 0;
+  border-radius: 24px;
+  background: var(--pd-surface);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cardMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.current {
+  display: flex;
+  align-items: flex-start;
+}
+
+.big {
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.degree {
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--pd-text-2);
+  margin-top: 3px;
+}
+
+.stats {
+  margin-left: auto;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 4px 22px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.statLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.statValue {
+  font-size: 17px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.chartBox {
+  flex: 1;
+  min-height: 0;
+  border-radius: 24px;
+  background: var(--pd-sunk);
+  padding: 24px 20px 14px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.plot {
+  position: relative;
+  width: 1020px;
+  height: 380px;
+  flex: none;
+}
+
+.gridLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--pd-control);
+}
+
+.yLabel {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: -8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+  white-space: nowrap;
+}
+
+.target {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1.5px dashed var(--pd-text-3);
+  opacity: 0.7;
+}
+
+.targetLabel {
+  position: absolute;
+  left: 8px;
+  top: -12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--pd-sunk);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd-text-2);
+}
+
+.svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+}
+
+.area {
+  stroke: none;
+  animation: pd-fade 0.7s 0.4s both;
+}
+
+.lineA,
+.lineB {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  animation: draw 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.lineA {
+  stroke-width: 3px;
+}
+
+.lineB {
+  stroke: var(--pd-blue);
+  stroke-width: 2.5px;
+}
+
+.end {
+  position: absolute;
+  left: 1014px;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 4px var(--pd-sunk);
+}
+
+.xLabels {
+  width: 1020px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.xLabel {
+  width: 0;
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}

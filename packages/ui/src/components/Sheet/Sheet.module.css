@@ -1,0 +1,36 @@
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: rgba(8, 7, 6, 0.55);
+  animation: pd-fade 0.25s ease;
+}
+
+.light {
+  background: rgba(8, 7, 6, 0.35);
+  animation-duration: 0.2s;
+}
+
+.panel {
+  position: absolute;
+  inset: 24px;
+  box-sizing: border-box;
+  border-radius: 32px;
+  background: var(--pd-bg);
+  color: var(--pd-text);
+  animation: pd-in 0.35s var(--pd-ease-out);
+}
+
+.close {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--pd-surface);
+  display: grid;
+  place-items: center;
+}
+
+.close:active {
+  transform: scale(0.9);
+}

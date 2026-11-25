@@ -1,0 +1,158 @@
+.tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--pd-radius-tile);
+  touch-action: none;
+  cursor: pointer;
+  min-height: 0;
+  transition: background 0.25s, transform 0.12s;
+}
+
+.tile:active {
+  transform: scale(0.98);
+}
+
+/* Dragging: the tile lifts with an accent ring */
+.tile.lifted,
+.tile.lifted:active {
+  transform: scale(1.018);
+  z-index: 2;
+  box-shadow: 0 0 0 2px var(--pd-accent), 0 10px 26px rgba(0, 0, 0, 0.35);
+  transition: transform 0.18s var(--pd-ease-out), box-shadow 0.18s;
+}
+
+/* States */
+.on {
+  background: var(--pd-on);
+  --icon-bg: var(--pd-accent);
+  --icon-ink: var(--pd-on-accent);
+  --track: var(--pd-accent);
+  --knob: var(--pd-on-accent);
+  --knob-x: 20px;
+  --status: var(--pd-on-sub);
+}
+
+.off {
+  background: var(--pd-surface);
+  --icon-bg: var(--pd-control);
+  --icon-ink: var(--pd-text-2);
+  --track: var(--pd-track);
+  --knob: var(--pd-text-3);
+  --knob-x: 0px;
+  --status: var(--pd-text-2);
+}
+
+.offline {
+  background: var(--pd-surface-off);
+  opacity: 0.6;
+  --icon-bg: var(--pd-icon-off);
+  --icon-ink: var(--pd-text-2);
+  --track: var(--pd-track);
+  --knob: var(--pd-text-3);
+  --knob-x: 0px;
+  --status: var(--pd-coral-text);
+}
+
+/* Brightness fill, from the left */
+.fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--pd-on-fill);
+}
+
+.content {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--icon-bg);
+  color: var(--icon-ink);
+  display: grid;
+  place-items: center;
+}
+
+.switch {
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--track);
+  padding: 4px;
+  box-sizing: border-box;
+  display: flex;
+  transition: background 0.2s;
+}
+
+.knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--knob);
+  transform: translateX(var(--knob-x));
+  transition: transform 0.26s var(--pd-ease-spring), background 0.2s;
+}
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: pretty;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--status);
+}
+
+.percent {
+  flex: none;
+  display: inline-block;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--pd-accent-text);
+  transform-origin: 100% 100%;
+}
+
+/* Large variant (cinema page) */
+.large .content {
+  padding: 16px 18px 16px 16px;
+}
+
+.large .name {
+  font-size: 18px;
+}
+
+.large .bottom {
+  gap: 0;
+}

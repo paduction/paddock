@@ -1,0 +1,82 @@
+.card {
+  border-radius: var(--pd-radius-tile);
+  background: var(--pd-surface);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  color: var(--pd-text-2);
+  display: grid;
+  place-items: center;
+}
+
+.iconOn {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
+  gap: 6px;
+}
+
+.move,
+.moveOn {
+  height: 48px;
+  border-radius: 16px;
+  background: var(--pd-control);
+  color: var(--pd-text);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.moveOn {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+}
+
+.move:active,
+.moveOn:active {
+  transform: scale(0.95);
+}
+
+.stop {
+  height: 48px;
+  border-radius: 16px;
+  background: var(--pd-control);
+  display: grid;
+  place-items: center;
+}
+
+.stop:active {
+  background: var(--pd-control-press);
+  transform: scale(0.92);
+}

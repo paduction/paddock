@@ -1,0 +1,53 @@
+.button {
+  border-radius: var(--pd-radius-card);
+  padding: 0 14px 0 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  min-height: 0;
+  transition: background 0.25s;
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+.idle {
+  background: var(--pd-surface);
+  color: var(--pd-text);
+  --icon-bg: var(--pd-control);
+  --icon-ink: var(--pd-text);
+  --sub: var(--pd-text-2);
+}
+
+.active {
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+  --icon-bg: var(--pd-on-accent);
+  --icon-ink: var(--pd-accent);
+  --sub: #5c4712;
+}
+
+.iconCircle {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--icon-bg);
+  color: var(--icon-ink);
+  display: grid;
+  place-items: center;
+}
+
+.name {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sub);
+}

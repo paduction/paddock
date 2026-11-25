@@ -1,0 +1,76 @@
+.card {
+  display: block;
+  width: calc(100% + 24px);
+  box-sizing: border-box;
+  text-align: left;
+  margin: 0 -12px;
+  padding: 8px 12px 10px;
+  border-radius: 20px;
+  transition: background 0.2s, transform 0.12s;
+}
+
+.card:active {
+  background: var(--pd-bg);
+  transform: scale(0.98);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd-text-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.reading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.icon {
+  flex: none;
+}
+
+.temperature {
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.detail {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+  margin-top: 6px;
+  padding-left: 27px;
+}

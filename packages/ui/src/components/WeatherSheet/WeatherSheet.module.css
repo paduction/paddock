@@ -1,0 +1,193 @@
+.panel {
+  padding: 24px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.temperature {
+  font-size: 76px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.now {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: none;
+}
+
+.condition {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.detail {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+  white-space: nowrap;
+}
+
+.stats {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.stat {
+  height: 64px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  background: var(--pd-surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.statLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.statValue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.hours {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 4px;
+  padding: 14px 8px;
+  border-radius: 24px;
+  background: var(--pd-sunk);
+}
+
+.hour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+.hourLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.hourTemp {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.rain {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.daysSection {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.daysHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.legend {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+}
+
+.days {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 0;
+  border-radius: 20px;
+}
+
+.dayLabel {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.date {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pd-text-3);
+  margin-top: -4px;
+}
+
+.max {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  width: 8px;
+  border-radius: 999px;
+  background: var(--pd-control);
+}
+
+.range {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 999px;
+  background: linear-gradient(var(--pd-accent), var(--pd-blue));
+  animation: pd-in 0.5s var(--pd-ease-out) both;
+}
+
+.min {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-text-2);
+}

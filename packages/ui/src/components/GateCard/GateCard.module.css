@@ -1,0 +1,96 @@
+.card {
+  border-radius: 28px;
+  padding: 20px 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background 0.3s;
+  min-height: 0;
+}
+
+.closed {
+  background: var(--pd-surface);
+  color: var(--pd-text);
+  --sub: var(--pd-text-2);
+  --icon-bg: var(--pd-control);
+  --icon-ink: var(--pd-text-2);
+  --btn-bg: var(--pd-control);
+  --btn-ink: var(--pd-text);
+}
+
+.moving {
+  background: var(--pd-gate-moving);
+  color: var(--pd-text);
+  --sub: var(--pd-coral-text);
+  --icon-bg: var(--pd-coral);
+  --icon-ink: #2b1206;
+  --btn-bg: var(--pd-control);
+  --btn-ink: var(--pd-text);
+}
+
+.open {
+  background: var(--pd-coral);
+  color: #2b1206;
+  --sub: #5a2410;
+  --icon-bg: #2b1206;
+  --icon-ink: var(--pd-coral);
+  --btn-bg: #2b1206;
+  --btn-ink: #ffd9c8;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--icon-bg);
+  color: var(--icon-ink);
+  display: grid;
+  place-items: center;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.since {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sub);
+}
+
+.status {
+  font-size: 54px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.button {
+  height: 60px;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-size: 17px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+.spin {
+  animation: pd-spin 0.9s linear infinite;
+}
