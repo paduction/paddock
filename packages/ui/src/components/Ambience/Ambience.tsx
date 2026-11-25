@@ -1,15 +1,16 @@
-import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import styles from './Ambience.module.css'
 
 /**
  * Living backgrounds for a tile: something quiet happens behind the content while a state lasts
- * (flames while the heating runs, a water line for the pool, stirred when its pump runs).
+ * (a fire while the heating runs, a water line for the pool, stirred when its pump runs).
  *
  * The host tile needs `position: relative; overflow: hidden; isolation: isolate`: the layer sits
  * above the tile's background and under its content, and never takes a touch.
  *
- * Only `transform` and `opacity` move, each on its own element, so a slow tablet leaves the work to
- * its graphics chip. Everything stops under an ancestor carrying `data-pd-still` (screensaver)
+ * The wall tablet is slow. The water only moves by `transform` and `opacity`, each on its own element,
+ * so its graphics chip does the work; the fire is painted on a small canvas (see there why).
+ * Everything rests under an ancestor carrying `data-pd-still` (screensaver)
  * and for people who asked their system for less motion.
  */
 
@@ -31,166 +32,180 @@ const vars = (values: Record<string, string>) => values as CSSProperties
 /* ---------- Flames ---------- */
 
 /*
- * What makes a drawn fire read as fire, and how each point is done with transforms only:
- * - it flows upwards: tongues shoot up fast and sink back slower, and licks break off, rise, thin out and vanish;
- * - a flame bends, it does not rock like a cut-out: each one is a body plus a tongue that moves more and faster;
- * - a draught runs through it: neighbours lean the same way at the same moment (`wind`);
- * - it has a hot core: a smaller amber flame inside each coral one, and a few sparks above.
- * Every part gets one long animation (LOOP) made of chance poses, built once: no script runs while it burns,
- * and with some forty parts on different beats nobody can see the loop come round.
+ * The fire is drawn, not assembled from moving pieces: a flame is a shape whose outline changes all the time,
+ * and no amount of stretching and tilting a fixed drawing gives that. So this one background paints on a canvas,
+ * about thirty times a second, flat shapes only (a few hundred points): light work even for the wall tablet.
+ *
+ * What makes it read as fire:
+ * - each flame dances: a wave travels up its spine, small at the foot, wide at the tip, so its curves keep changing;
+ * - it breathes: its height and its width never settle, and now and then it shoots up;
+ * - a draught runs through: neighbours bend the same way at the same moment;
+ * - licks break off the tips, rise and thin out; a smaller amber flame sits inside each one; a few sparks fly above.
  */
 
-const LOOP = 12000
 const TURN = Math.PI * 2
 
-interface Fire {
-  /** Centre and width, % of the tile's width */
+/** A number from 0 to 1, always the same for the same pair. */
+function chance(a: number, b: number): number {
+  const x = Math.sin(a * 127.1 + b * 311.7) * 43758.5453
+  return x - Math.floor(x)
+}
+
+/** A value from 0 to 1 that wanders smoothly with `t` and never repeats (one per `seed`). */
+function wander(t: number, seed: number): number {
+  const whole = Math.floor(t)
+  const part = t - whole
+  const ease = part * part * (3 - 2 * part)
+  return chance(whole, seed) * (1 - ease) + chance(whole + 1, seed) * ease
+}
+
+const mix = (from: number, to: number, amount: number) => from + (to - from) * amount
+
+interface Point {
   x: number
-  w: number
-  /** Height, % of the flames' band */
-  h: number
-  shape: number
-  flip: boolean
-  /** Where the tongue stands on the body, % of the flame's width */
-  lean: number
+  y: number
 }
 
-// bodies: pointed tip, straight foot so that neighbours join at the bottom
-const BODIES = [
-  'M60 0C58 22 93 44 93 73V100H7V73C7 50 30 44 40 27C46 17 55 12 60 0Z',
-  'M42 0C50 16 44 26 56 38C70 52 90 58 90 76V100H10V76C10 56 28 50 34 34C38 22 36 12 42 0Z',
-  'M50 0C52 18 68 26 72 42C76 36 79 30 79 22C90 38 94 56 94 74V100H6V74C6 54 22 46 29 30C33 39 38 42 42 40C40 26 44 12 50 0Z',
-]
-// the tongue: slender, bent, its round foot hidden in the body
-const TONGUE = 'M45 0C56 18 45 30 58 45C70 58 84 66 84 82C84 94 70 100 50 100S16 94 16 82C16 62 35 54 39 36C41 24 38 12 45 0Z'
-// a lick that broke off
-const LICK = 'M50 0C60 30 84 50 84 70C84 88 70 100 50 100S16 88 16 70C16 50 40 30 50 0Z'
-
-const between = (min: number, max: number) => min + Math.random() * (max - min)
-const fixed = (value: number) => value.toFixed(2)
-
-function drawFires(count: number): Fire[] {
-  const step = 100 / count
-  return Array.from({ length: count }, (_, i) => ({
-    x: (i + 0.5) * step + between(-step / 4, step / 4),
-    w: between(20, 31),
-    h: between(48, 92),
-    shape: Math.floor(Math.random() * BODIES.length),
-    flip: Math.random() < 0.5,
-    lean: between(-14, 14),
-  }))
-}
-
-type Wind = (ms: number, x: number) => number
-
-/** The draught, in degrees of lean: a few slow swings on top of each other, drifting across the tile. Comes round with LOOP. */
-function drawWind(): Wind {
-  const swings = [
-    { size: 5.5, turns: 1 },
-    { size: 3.2, turns: 3 },
-    { size: 2, turns: 7 },
-  ].map((swing) => ({ ...swing, phase: between(0, TURN) }))
-  return (ms, x) => swings.reduce((sum, s) => sum + s.size * Math.sin(TURN * ((s.turns * ms) / LOOP - x / 280) + s.phase), 0)
-}
-
-/** Moments of the loop, in ms, with an uneven gap between them. */
-function beats(min: number, max: number): number[] {
-  const out = [0]
-  for (let ms = between(min, max); ms < LOOP - min; ms += between(min, max)) out.push(ms)
-  return out
-}
-
-/** Closes a list of poses into a loop: it ends as it starts. */
-const looped = (frames: Keyframe[]): Keyframe[] => [...frames, { ...frames[0], offset: 1 }]
-
-/** The body breathes and leans a little with the draught. */
-function bodyFrames(wind: Wind, x: number): Keyframe[] {
-  return looped(
-    beats(420, 900).map((ms) => ({
-      offset: ms / LOOP,
-      easing: 'ease-in-out',
-      transform: `skewX(${fixed(0.35 * wind(ms, x) + between(-1.5, 1.5))}deg) scale(${fixed(between(0.95, 1.05))}, ${fixed(between(0.9, 1.08))})`,
-    })),
-  )
-}
-
-/** The tongue flickers several times a second: up fast, down slower, thinner when taller, leaning hard with the draught. */
-function tongueFrames(wind: Wind, x: number): Keyframe[] {
-  const moments = beats(120, 330)
-  const tall = moments.map(() => (Math.random() < 0.2 ? between(1.12, 1.38) : between(0.5, 1)))
-  return looped(
-    moments.map((ms, i) => ({
-      offset: ms / LOOP,
-      easing: tall[(i + 1) % tall.length] > tall[i] ? 'cubic-bezier(0.15, 0.75, 0.3, 1)' : 'ease-in',
-      transform: `skewX(${fixed(1.3 * wind(ms, x) + between(-6, 6))}deg) scale(${fixed(1.1 - 0.32 * (tall[i] - 0.5) + between(-0.05, 0.05))}, ${fixed(tall[i])})`,
-    })),
-  )
-}
-
-/**
- * Something that leaves the fire again and again: it appears, rises, shrinks and fades, then waits unseen.
- * `rise` and `drift` are in the unit given (the part's own size in %, or px).
- */
-function risingFrames(wind: Wind, x: number, o: { gap: [number, number]; life: [number, number]; rise: [number, number]; spread: number; unit: string; end: string }): Keyframe[] {
-  const rest = { opacity: 0, transform: 'none' }
-  const frames: Keyframe[] = [{ ...rest, offset: 0 }]
-  for (let ms = between(0, o.gap[1]); ms + o.life[1] < LOOP; ms += between(...o.gap)) {
-    const life = between(...o.life)
-    const from = between(-o.spread, o.spread)
-    const to = from + wind(ms, x) * (o.spread / 12)
-    const up = between(...o.rise)
-    frames.push({ offset: ms / LOOP, opacity: 0, easing: 'ease-out', transform: `translate(${fixed(from)}${o.unit}, 0) scale(1)` })
-    frames.push({ offset: (ms + life * 0.15) / LOOP, opacity: 1, easing: 'ease-out', transform: `translate(${fixed(from + (to - from) * 0.3)}${o.unit}, ${fixed(-up * 0.3)}${o.unit}) scale(1)` })
-    frames.push({ offset: (ms + life) / LOOP, opacity: 0, transform: `translate(${fixed(to)}${o.unit}, ${fixed(-up)}${o.unit}) ${o.end}` })
-    ms += life
-  }
-  return [...frames, { ...rest, offset: 1 }]
-}
-
-const FRAMES: Record<string, (wind: Wind, x: number) => Keyframe[]> = {
-  body: bodyFrames,
-  tongue: tongueFrames,
-  lick: (wind, x) => risingFrames(wind, x, { gap: [350, 1900], life: [380, 700], rise: [140, 300], spread: 45, unit: '%', end: 'scale(0.15, 0.4)' }),
-  spark: (wind, x) => risingFrames(wind, x, { gap: [700, 3600], life: [900, 1700], rise: [70, 190], spread: 26, unit: 'px', end: 'scale(0.4)' }),
-}
-
-/** Sets the fire going: one endless animation per part (see the note above). Rests under the screensaver. */
-function useBurning(band: RefObject<HTMLDivElement | null>, on: boolean) {
-  useEffect(() => {
-    const host = band.current
-    if (!on || !host || !('animate' in host) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const wind = drawWind()
-    const moves = [...host.querySelectorAll<HTMLElement | SVGElement>('[data-part]')].map((part) =>
-      part.animate(FRAMES[part.dataset.part!](wind, Number(part.dataset.x)), { duration: LOOP, iterations: Infinity }),
-    )
-    let resting = false
-    const watch = setInterval(() => {
-      const still = !!host.closest('[data-pd-still]')
-      if (still === resting) return
-      resting = still
-      moves.forEach((move) => (still ? move.pause() : move.play()))
-    }, 1500)
-    return () => {
-      clearInterval(watch)
-      moves.forEach((move) => move.cancel())
+/** A closed outline through the points, rounded at each of them except where `sharp` says so. */
+function trace(path: Path2D, points: Point[], sharp: number) {
+  const middle = (a: Point, b: Point) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 })
+  path.moveTo(points[0].x, points[0].y)
+  for (let i = 1; i < points.length - 1; i++) {
+    if (i === sharp) {
+      path.lineTo(points[i].x, points[i].y)
+      continue
     }
-  }, [band, on])
+    const next = i + 1 === sharp || i + 1 === points.length - 1 ? points[i + 1] : middle(points[i], points[i + 1])
+    path.quadraticCurveTo(points[i].x, points[i].y, next.x, next.y)
+  }
+  path.lineTo(points[points.length - 1].x, points[points.length - 1].y)
+  path.closePath()
 }
 
-/** One flame: body, tongue and, for the big ones, the lick that breaks off. `size` shrinks it into a core. */
-function FireShape({ fire, size = 1, lick = false }: { fire: Fire; size?: number; lick?: boolean }) {
-  const part = (name: string, className: string, path: string, style?: CSSProperties) => (
-    <svg data-part={name} data-x={fire.x} className={`${className} ${styles.moving}`} viewBox="0 0 100 100" preserveAspectRatio="none" style={style}>
-      <path d={path} fill="currentColor" transform={fire.flip ? 'translate(100 0) scale(-1 1)' : undefined} />
-    </svg>
-  )
-  return (
-    <div className={styles.fire} style={vars({ left: `${fire.x - (fire.w * size) / 2}%`, width: `${fire.w * size}%`, height: `${fire.h * size}%` })}>
-      {lick && part('lick', styles.lick, LICK, vars({ left: `${37 + fire.lean}%` }))}
-      {part('tongue', styles.tongue, TONGUE, vars({ left: `${20 + fire.lean}%` }))}
-      {part('body', styles.body, BODIES[fire.shape])}
-    </div>
-  )
+interface Dancer {
+  /** Foot: its middle and half its width */
+  x: number
+  foot: number
+  half: number
+  /** Height now */
+  tall: number
+  /** How far the tip swings, as a share of the height; waves along the flame; swings per second */
+  sway: number
+  waves: number
+  speed: number
+  /** Lean given by the draught, in degrees */
+  lean: number
+  seed: number
+}
+
+/** Where the spine of a flame is at height `s` (0 foot, 1 tip), sideways from its foot. */
+function spine(f: Dancer, s: number, t: number): number {
+  const first = Math.sin(TURN * (f.waves * s - f.speed * t) + f.seed)
+  const second = Math.sin(TURN * (2.3 * f.waves * s - 1.9 * f.speed * t) + f.seed * 1.7)
+  return f.tall * f.sway * (Math.pow(s, 1.4) * first + 0.4 * s * s * second) + Math.tan((f.lean * Math.PI) / 180) * f.tall * s * s
+}
+
+const STEPS = 14
+
+/** Adds one flame to the path: straight foot, belly, pointed tip, bent by its spine. `ground`: where the tile ends. */
+function flame(path: Path2D, f: Dancer, t: number, ground: number) {
+  const left: Point[] = []
+  const right: Point[] = []
+  for (let i = 0; i <= STEPS; i++) {
+    const s = i / STEPS
+    const ripple = 1 + 0.14 * Math.sin(TURN * (1.7 * f.waves * s - 1.4 * f.speed * t) + f.seed * 2.3)
+    const half = f.half * Math.pow(1 - s, 0.85) * (1 + 1.1 * s * (1 - s)) * ripple
+    const x = f.x + spine(f, s, t)
+    const y = f.foot - s * f.tall
+    left.push({ x: x - half, y })
+    right.push({ x: x + half, y })
+  }
+  // up the left side, over the tip (kept sharp), down the right side
+  trace(path, [{ x: f.x - f.half, y: ground }, ...left, ...right.reverse().slice(1), { x: f.x + f.half, y: ground }], STEPS + 1)
+}
+
+/** Adds a lick that left its flame: a small drop, pointed upwards. */
+function lick(path: Path2D, x: number, y: number, size: number, bend: number) {
+  const left: Point[] = []
+  const right: Point[] = []
+  const steps = 6
+  for (let i = 0; i <= steps; i++) {
+    const s = i / steps
+    const half = size * Math.pow(Math.sin(Math.PI * Math.min(1, s * 1.15)), 0.8) * (1 - 0.55 * s)
+    const cx = x + bend * s * s
+    left.push({ x: cx - half, y: y - s * size * 3 })
+    right.push({ x: cx + half, y: y - s * size * 3 })
+  }
+  trace(path, [...left, ...right.reverse().slice(1)], steps)
+}
+
+/** One picture of the fire. `reach`: how far up the tile it goes (0…1). */
+function paintFire(ctx: CanvasRenderingContext2D, width: number, height: number, reach: number, t: number, seed: number, coral: string, amber: string) {
+  const band = height * reach
+  const ground = height + 4
+  const wind = (x: number) => 5.5 * Math.sin(0.52 * t - x * 2.2 + seed) + 3.2 * Math.sin(1.57 * t - x * 2.2 + seed * 1.7) + 2 * Math.sin(3.67 * t - x * 2.2 + seed * 2.3)
+  const back = new Path2D()
+  const front = new Path2D()
+  const count = 9
+  for (let i = 0; i < count; i++) {
+    const me = seed + i * 31
+    const x = (i + 0.5 + (chance(me, 1) - 0.5) / 2) / count
+    // it breathes, and now and then it shoots up
+    const burst = wander(t * 1.3, me + 3)
+    const tall = band * mix(0.55, 1, chance(me, 2)) * (0.72 + 0.34 * wander(t * 2.4, me + 4) + (burst > 0.7 ? (burst - 0.7) * 0.9 : 0))
+    const dancer: Dancer = {
+      x: x * width,
+      foot: height,
+      half: (width * mix(0.13, 0.2, chance(me, 5))) / 2,
+      tall,
+      sway: mix(0.1, 0.2, chance(me, 6)),
+      waves: mix(0.45, 0.8, chance(me, 7)),
+      speed: mix(0.9, 1.5, chance(me, 8)),
+      lean: wind(x),
+      seed: me,
+    }
+    flame(back, dancer, t, ground)
+    // the hot core follows its flame, a touch behind
+    flame(front, { ...dancer, half: dancer.half * 0.5, tall: tall * 0.55 }, t - 0.06, ground)
+
+    // a lick leaves the tip, rises and thins out, then the flame waits before the next one
+    const turn = t / mix(1.0, 2.3, chance(me, 9)) + chance(me, 10)
+    const life = Math.floor(turn)
+    const lasts = mix(0.3, 0.5, chance(life, me + 11))
+    const moment = turn - life
+    if (moment < lasts) {
+      const q = moment / lasts
+      const up = 1 - (1 - q) * (1 - q)
+      const size = dancer.half * 0.2 * Math.pow(1 - q, 1.3)
+      lick(back, dancer.x + spine(dancer, 0.9, t) + dancer.lean * 0.5 * up, height - tall * 0.9 - band * mix(0.25, 0.6, chance(life, me + 12)) * up, size, dancer.lean * 0.4)
+    }
+  }
+  // one fill per colour: flames that overlap read as a single flat shape
+  ctx.globalAlpha = 0.2
+  ctx.fillStyle = coral
+  ctx.fill(back)
+  ctx.globalAlpha = 0.17
+  ctx.fillStyle = amber
+  ctx.fill(front)
+
+  // sparks: once in a while one rises above the fire and goes out
+  ctx.fillStyle = amber
+  for (let i = 0; i < 5; i++) {
+    const me = seed + 500 + i * 17
+    const turn = t / mix(2.4, 4.8, chance(me, 1)) + chance(me, 2)
+    const life = Math.floor(turn)
+    const lasts = mix(0.25, 0.4, chance(life, me + 3))
+    const moment = turn - life
+    if (moment >= lasts) continue
+    const q = moment / lasts
+    const up = 1 - (1 - q) * (1 - q)
+    const x = mix(0.08, 0.92, chance(life, me + 4))
+    ctx.globalAlpha = 0.6 * (q < 0.15 ? q / 0.15 : 1 - (q - 0.15) / 0.85)
+    ctx.beginPath()
+    ctx.arc(x * width + mix(-18, 18, chance(life, me + 6)) * up + wind(x) * 1.5 * up, height - band * 0.35 - mix(0.5, 1.3, chance(life, me + 7)) * band * up, (mix(2.5, 4, chance(me, 5)) * mix(1, 0.4, q)) / 2, 0, TURN)
+    ctx.fill()
+  }
+  ctx.globalAlpha = 1
 }
 
 /**
@@ -200,32 +215,44 @@ function FireShape({ fire, size = 1, lick = false }: { fire: Fire; size?: number
  */
 export function Flames({ active, height = 36 }: { active: boolean; height?: number }) {
   const shown = useLinger(active)
-  const band = useRef<HTMLDivElement>(null)
-  const [drawn] = useState(() => ({
-    fires: drawFires(7),
-    sparks: Array.from({ length: 5 }, () => ({ x: between(8, 92), size: between(3, 5) })),
-  }))
-  useBurning(band, shown)
+  const canvas = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const view = canvas.current
+    const ctx = view?.getContext('2d')
+    if (!shown || !view || !ctx) return
+    const seed = Math.floor(Math.random() * 1000)
+    const style = getComputedStyle(view)
+    const coral = style.getPropertyValue('--pd-coral').trim() || '#f07a4a'
+    const amber = style.getPropertyValue('--pd-accent').trim() || '#f5c451'
+    const paint = (now: number) => {
+      const width = view.clientWidth
+      const tall = view.clientHeight
+      // sharp enough on the tablet without painting four times the pixels
+      const sharp = Math.min(window.devicePixelRatio || 1, 1.5)
+      if (view.width !== Math.round(width * sharp) || view.height !== Math.round(tall * sharp)) {
+        view.width = Math.round(width * sharp)
+        view.height = Math.round(tall * sharp)
+      }
+      ctx.setTransform(sharp, 0, 0, sharp, 0, 0)
+      ctx.clearRect(0, 0, width, tall)
+      paintFire(ctx, width, tall, height / 100, now / 1000, seed, coral, amber)
+    }
+    // people who asked for less motion get a still fire
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return paint(0)
+    let frame = 0
+    let last = 0
+    const loop = (now: number) => {
+      frame = requestAnimationFrame(loop)
+      // thirty pictures a second are plenty; under the screensaver the fire rests
+      if (now - last < 32 || view.closest('[data-pd-still]')) return
+      last = now
+      paint(now)
+    }
+    frame = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(frame)
+  }, [shown, height])
   if (!shown) return null
-  return (
-    <div ref={band} className={active ? styles.flames : `${styles.flames} ${styles.leaving}`} style={vars({ height: `${height}%` })} aria-hidden>
-      <div className={`${styles.row} ${styles.rowBack}`}>
-        {drawn.fires.map((fire, i) => (
-          <FireShape key={i} fire={fire} lick />
-        ))}
-      </div>
-      <div className={`${styles.row} ${styles.rowFront}`}>
-        {drawn.fires.map((fire, i) => (
-          <FireShape key={i} fire={fire} size={0.55} />
-        ))}
-      </div>
-      <div className={`${styles.row} ${styles.rowSparks}`}>
-        {drawn.sparks.map((spark, i) => (
-          <span key={i} data-part="spark" data-x={spark.x} className={`${styles.spark} ${styles.moving}`} style={vars({ left: `${spark.x}%`, width: `${spark.size}px`, height: `${spark.size}px` })} />
-        ))}
-      </div>
-    </div>
-  )
+  return <canvas ref={canvas} className={active ? styles.flames : `${styles.flames} ${styles.leaving}`} aria-hidden />
 }
 
 /* ---------- Water ---------- */
