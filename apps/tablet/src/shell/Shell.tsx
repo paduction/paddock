@@ -15,6 +15,7 @@ import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { useUi, type ViewId } from '../stores/ui.store'
 import { Sidebar } from './Sidebar'
 import { TABS } from './tabs'
+import { AutomationOverlays } from '../widgets/AutomationOverlays'
 import { CameraOverlays } from '../widgets/CameraOverlays'
 import { MovieOverlays } from '../widgets/MovieOverlays'
 import { SidebarOverlays } from '../widgets/SidebarOverlays'
@@ -60,6 +61,7 @@ export function Shell() {
       {!saver && <SidebarOverlays />}
       {!saver && <CameraOverlays />}
       {!saver && <MovieOverlays />}
+      {!saver && <AutomationOverlays />}
       {saver && <SaverWidget />}
     </Stage>
   )

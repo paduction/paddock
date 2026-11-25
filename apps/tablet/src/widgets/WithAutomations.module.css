@@ -1,0 +1,30 @@
+/* Takes the tile's place in its row or column and lets it fill it */
+.wrap {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+.badge {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+}
+
+.corner {
+  right: 16px;
+  bottom: 16px;
+}
+
+/* right of the light's icon */
+.light {
+  left: 72px;
+  top: 22px;
+}
+
+/* left of the shutter's percentage */
+.cover {
+  right: 96px;
+  top: 12px;
+}

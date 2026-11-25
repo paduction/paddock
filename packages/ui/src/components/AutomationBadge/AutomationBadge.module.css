@@ -1,0 +1,32 @@
+.badge {
+  height: 36px;
+  padding: 0 12px 0 9px;
+  border-radius: 999px;
+  background: var(--pd-control);
+  color: var(--pd-accent-text);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 0 0 2px var(--pd-bg);
+}
+
+.badge:active {
+  transform: scale(0.94);
+}
+
+.compact {
+  height: 32px;
+  min-width: 32px;
+  padding: 0 7px;
+  justify-content: center;
+  gap: 3px;
+  font-size: 12px;
+}
+
+.paused {
+  color: var(--pd-text-3);
+}

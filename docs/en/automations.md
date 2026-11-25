@@ -10,6 +10,10 @@ without opening Home Assistant.
 Everything is created and changed in the interface: press **+ Mode** or **+ Schedule**, give it a name,
 say when it runs, then choose what each device does. A device you do not touch is left alone.
 
+On the Lighting, Shutters and Outdoor pages, the tile of a device driven by an automation carries a badge
+(for example *06:00 → 08:00* on the pump). Press it to open the automation; when there are several,
+the tab opens on the ones of that device.
+
 ## When a schedule runs
 
 | | |

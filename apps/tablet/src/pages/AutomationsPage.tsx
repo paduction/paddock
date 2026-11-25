@@ -1,67 +1,23 @@
 import { useState } from 'react'
 import { Icon, ModeTile, ScheduleRow } from '@paddock/ui'
-import { activeDays, automatableDevices, isMode, newAutomation, type AutomatableDevice, type Automation, type Trigger } from '@paddock/core'
-import { config } from '../config'
+import { automationsFor, isMode, newAutomation, type Automation } from '@paddock/core'
 import { t } from '../i18n'
-import { runAutomation, saveAutomation, useAutomations } from '../stores/automations.store'
-import { AutomationEditor } from '../widgets/AutomationEditor'
+import { openAutomation, runAutomation, saveAutomation, showAutomationsOf, useAutomations } from '../stores/automations.store'
+import { automationDevices } from '../widgets/AutomationOverlays'
+import { whatText, whenText } from '../widgets/automationTexts'
 import styles from './AutomationsPage.module.css'
-
-/** "Mon – Fri", "Weekend", "Every day", or the days one by one. */
-function daysText(trigger: Trigger): string {
-  const days = activeDays(trigger)
-  const key = days.join('')
-  if (days.length === 7) return t('automations.everyDay')
-  if (key === '01234') return t('automations.weekdays')
-  if (key === '56') return t('automations.weekend')
-  return days.map((d) => t(`automations.dayShort.${d}`)).join(' ')
-}
-
-function whenText(trigger: Trigger): string {
-  if (trigger.type === 'manual') return ''
-  const offset = (minutes: number) => (minutes === 0 ? '' : ` ${minutes > 0 ? '+' : '−'}${Math.abs(minutes)} min`)
-  const moment =
-    trigger.type === 'time'
-      ? trigger.end
-        ? `${trigger.at} → ${trigger.end}`
-        : trigger.at
-      : trigger.type === 'sun'
-        ? t(trigger.event === 'sunrise' ? 'automations.sunrise' : 'automations.sunset') + offset(trigger.offset)
-        : t(trigger.event === 'everyone_left' ? 'automations.everyoneLeft' : 'automations.someoneArrived')
-  return `${daysText(trigger)} · ${moment}`
-}
-
-/** One device: "Pump · Turn on"; several: "3 shutters · 2 lights". */
-function whatText(automation: Automation, devices: AutomatableDevice[]): string {
-  const known = automation.actions.map((a) => ({ action: a, device: devices.find((d) => d.entity === a.entity) })).filter((x) => x.device)
-  if (!known.length) return t('automations.nothing')
-  if (known.length === 1) {
-    const { action, device } = known[0]
-    const what = action.do === 'position' ? t((action.value ?? 0) <= 20 ? 'automations.do.ajar' : 'automations.do.position', { n: action.value ?? 0 }) : t(`automations.do.${action.do}`)
-    return `${device!.name} · ${what}`
-  }
-  const count = (kinds: AutomatableDevice['kind'][]) => known.filter((x) => kinds.includes(x.device!.kind)).length
-  const parts: string[] = []
-  if (count(['cover', 'gate'])) parts.push(t('automations.covers', { n: count(['cover', 'gate']) }))
-  if (count(['light'])) parts.push(t('automations.lights', { n: count(['light']) }))
-  if (count(['switch', 'scene'])) parts.push(t('automations.others', { n: count(['switch', 'scene']) }))
-  return parts.join(' · ')
-}
 
 /** Modes (buttons) on the left, schedules and triggers on the right; both edited in place. */
 export function AutomationsPage() {
-  const items = useAutomations((s) => s.items)
+  const all = useAutomations((s) => s.items)
   const status = useAutomations((s) => s.status)
-  const [editing, setEditing] = useState<Automation | null>(null)
+  const filter = useAutomations((s) => s.filter)
   const [started, setStarted] = useState<string | null>(null)
-  const devices = automatableDevices(config, {
-    scenes: t('automations.group.scenes'),
-    outdoor: t('automations.group.outdoor'),
-    cinema: t('automations.group.amplifier'),
-    gate: t('automations.group.gate'),
-  })
+  const devices = automationDevices()
+  const items = filter ? automationsFor(all, filter.entity) : all
   const modes = items.filter(isMode)
   const schedules = items.filter((a) => !isMode(a))
+  const setEditing = openAutomation
 
   async function run(automation: Automation) {
     if (!(await runAutomation(automation.id!))) return
@@ -70,7 +26,13 @@ export function AutomationsPage() {
   }
 
   return (
-    <div className={styles.page}>
+    <div className={filter ? `${styles.page} ${styles.filtered}` : styles.page}>
+      {filter && (
+        <button className={styles.filter} onClick={() => showAutomationsOf(null)}>
+          {t('automations.filter', { name: filter.name })}
+          <Icon name="close" size={18} />
+        </button>
+      )}
       <section className={styles.column}>
         <header className={styles.header}>
           <span className={styles.title}>{t('automations.modes')}</span>
@@ -127,8 +89,6 @@ export function AutomationsPage() {
           <p className={styles.empty}>{t(status === 'unsupported' ? 'automations.unsupported' : status === 'loading' ? 'automations.loading' : 'automations.noSchedules')}</p>
         )}
       </section>
-
-      {editing && <AutomationEditor key={editing.id ?? 'new'} initial={editing} devices={devices} onClose={() => setEditing(null)} />}
     </div>
   )
 }

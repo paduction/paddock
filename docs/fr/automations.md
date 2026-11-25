@@ -10,6 +10,10 @@ de bureau, sans ouvrir Home Assistant.
 Tout se crée et se modifie dans l'interface : appuyez sur **+ Mode** ou **+ Horaire**, donnez un nom,
 dites quand il agit, puis choisissez ce que fait chaque appareil. Un appareil auquel vous ne touchez pas est laissé tel quel.
 
+Sur les pages Éclairage, Volets et Extérieur, la carte d'un appareil piloté par une automatisation porte une
+pastille (par exemple *06:00 → 08:00* sur la pompe). Appuyez dessus pour ouvrir l'automatisation ;
+s'il y en a plusieurs, l'onglet s'ouvre sur celles de cet appareil.
+
 ## Quand un horaire agit
 
 | | |

@@ -27,7 +27,7 @@
   display: grid;
 }
 
-.pump > button {
+.pump button[aria-pressed] {
   border-radius: 24px;
 }
 
@@ -36,6 +36,6 @@
   display: grid;
 }
 
-.device > button {
+.device button[aria-pressed] {
   border-radius: 24px;
 }

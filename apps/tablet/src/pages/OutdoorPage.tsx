@@ -4,6 +4,7 @@ import { config } from '../config'
 import { decimal, t } from '../i18n'
 import { toggleDevice, useDevices } from '../stores/devices.store'
 import { useEntity } from '../stores/hass.store'
+import { WithAutomations } from '../widgets/WithAutomations'
 import styles from './OutdoorPage.module.css'
 
 export function OutdoorPage() {
@@ -22,13 +23,15 @@ export function OutdoorPage() {
         <PoolCard label={t('outdoor.water')} temperature={pool === null ? '—' : decimal(shownPool)} />
         {cfg.poolDevice && (
           <div className={styles.pump}>
-            <SwitchTile
-              name={cfg.poolDevice.name}
-              icon={cfg.poolDevice.icon}
-              on={stateOf(0)}
-              status={stateOf(0) ? cfg.poolDevice.on : cfg.poolDevice.off}
-              onToggle={() => toggleDevice(cfg.poolDevice!, stateOf(0))}
-            />
+            <WithAutomations entity={cfg.poolDevice.entity} name={cfg.poolDevice.name} place="corner">
+              <SwitchTile
+                name={cfg.poolDevice.name}
+                icon={cfg.poolDevice.icon}
+                on={stateOf(0)}
+                status={stateOf(0) ? cfg.poolDevice.on : cfg.poolDevice.off}
+                onToggle={() => toggleDevice(cfg.poolDevice!, stateOf(0))}
+              />
+            </WithAutomations>
           </div>
         )}
       </div>
@@ -36,7 +39,9 @@ export function OutdoorPage() {
         <span className={styles.title}>{t('outdoor.title')}</span>
         {cfg.devices.map((d, i) => (
           <div key={d.entity} className={styles.device}>
-            <SwitchTile size="large" name={d.name} icon={d.icon} on={stateOf(i + offset)} status={stateOf(i + offset) ? d.on : d.off} onToggle={() => toggleDevice(d, stateOf(i + offset))} />
+            <WithAutomations entity={d.entity} name={d.name} place="corner">
+              <SwitchTile size="large" name={d.name} icon={d.icon} on={stateOf(i + offset)} status={stateOf(i + offset) ? d.on : d.off} onToggle={() => toggleDevice(d, stateOf(i + offset))} />
+            </WithAutomations>
           </div>
         ))}
       </div>

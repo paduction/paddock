@@ -73,3 +73,27 @@
   line-height: 1.5;
   color: var(--pd-text-2);
 }
+
+/* Reached from a device tile: only that device's automations, with a chip to see them all again */
+.filtered {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.filter {
+  grid-column: 1 / -1;
+  justify-self: start;
+  height: 40px;
+  padding: 0 12px 0 16px;
+  border-radius: 999px;
+  background: var(--pd-accent);
+  color: var(--pd-on-accent);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter:active {
+  transform: scale(0.96);
+}

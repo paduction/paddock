@@ -2,6 +2,7 @@ import { CoverGroupHeader, CoverTile, HouseCoversCard } from '@paddock/ui'
 import { coverGroups, isOpen, type Cover } from '@paddock/core'
 import { t } from '../i18n'
 import { moveCovers, setCoverPosition, useCoverList } from '../stores/covers.store'
+import { WithAutomations } from '../widgets/WithAutomations'
 import styles from './CoversPage.module.css'
 
 function statusFor(position: number) {
@@ -29,8 +30,8 @@ export function CoversPage() {
         <div key={group.name} className={styles.row}>
           <CoverGroupHeader title={group.name} summary={groupSummary(group.covers)} controls={group.covers.length > 1} onCommand={(cmd) => moveCovers(group.covers, cmd)} />
           {group.covers.map((cover) => (
+            <WithAutomations key={cover.id} entity={cover.entity} name={cover.name} place="cover">
             <CoverTile
-              key={cover.id}
               name={cover.name}
               available={cover.available}
               position={cover.position}
@@ -43,6 +44,7 @@ export function CoversPage() {
               onCommand={(cmd) => moveCovers([cover], cmd)}
               onPosition={(position, phase) => setCoverPosition(cover, position, phase)}
             />
+            </WithAutomations>
           ))}
           {gi === groups.length - 1 && (
             <HouseCoversCard

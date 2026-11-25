@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { PaddockConfig } from '../config/schema'
-import { actionFor, activeDays, automatableDevices, automationProblems, isMode, newAutomation, sameAction, sortAutomations, withAction, withDay, type Automation } from './automations'
+import { actionFor, activeDays, automatableDevices, automationsFor, automationProblems, isMode, newAutomation, sameAction, sortAutomations, withAction, withDay, type Automation } from './automations'
 
 const config = {
   home: { gate: { entity: 'cover.garage_door', name: 'Garage door', alertAfterMinutes: 10 }, cinema: { amplifier: 'switch.amplifier' }, alerts: { batteries: [], batteryLow: 10 } },
@@ -64,6 +64,15 @@ describe('editing', () => {
     const pump: Automation = { ...withAction({ ...newAutomation('schedule'), name: 'Pump' }, 'switch.pool_pump', { do: 'on' }) }
     expect(automationProblems(pump)).toEqual([])
     expect(automationProblems({ ...pump, trigger: { type: 'time', at: '06:00', end: '06:00' } })).toEqual(['end'])
+  })
+})
+
+describe('automationsFor', () => {
+  it('finds the automations that drive a device', () => {
+    const pump: Automation = { name: 'Pump', icon: 'valve', enabled: true, trigger: { type: 'time', at: '06:00' }, actions: [{ entity: 'switch.pool_pump', do: 'on' }] }
+    const leaving: Automation = { name: 'Leaving', icon: 'logout', enabled: true, trigger: { type: 'manual' }, actions: [{ entity: 'cover.living_room', do: 'close' }] }
+    expect(automationsFor([pump, leaving], 'switch.pool_pump')).toEqual([pump])
+    expect(automationsFor([pump, leaving], 'light.desk')).toEqual([])
   })
 })
 

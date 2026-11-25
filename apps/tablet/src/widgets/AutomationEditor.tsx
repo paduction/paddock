@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChipChoice, CloseButton, Icon, Segmented, Sheet } from '@paddock/ui'
 import {
   actionFor,
@@ -48,6 +48,9 @@ export function AutomationEditor({ initial, devices, onClose }: { initial: Autom
     setDraftState(next)
   }
   const [saving, setSaving] = useState(false)
+  // an existing automation opens on its first device, not on the top of a long list
+  const list = useRef<HTMLDivElement>(null)
+  useEffect(() => list.current?.querySelector(`.${styles.deviceOn}`)?.scrollIntoView({ block: 'center' }), [])
   const trigger = draft.trigger
   const groups = [...new Set(devices.map((d) => d.group))]
 
@@ -72,7 +75,7 @@ export function AutomationEditor({ initial, devices, onClose }: { initial: Autom
   }
 
   return (
-    <Sheet onClose={onClose} className={styles.sheet} frame={{ inset: 0 }}>
+    <Sheet onClose={onClose} className={styles.sheet}>
       <header className={styles.header}>
         <h2>{t(initial.id ? 'automations.edit' : trigger.type === 'manual' ? 'automations.newMode' : 'automations.newSchedule')}</h2>
         <CloseButton label={t('common.close')} onPress={onClose} />
@@ -183,7 +186,7 @@ export function AutomationEditor({ initial, devices, onClose }: { initial: Autom
 
         <section className={styles.devices}>
           <span className={styles.label}>{t('automations.what')}</span>
-          <div className={styles.list}>
+          <div className={styles.list} ref={list}>
             {groups.map((group) => (
               <div key={group} className={styles.group}>
                 <span className={styles.groupName}>{group}</span>

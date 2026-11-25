@@ -123,6 +123,9 @@ export function automationProblems(a: Automation): AutomationProblem[] {
   return out
 }
 
+/** Automations that do something with this device. */
+export const automationsFor = (list: Automation[], entity: string) => list.filter((a) => a.actions.some((x) => x.entity === entity))
+
 /** Modes first, then by time of day, then the others; same order on every screen. */
 export function sortAutomations(list: Automation[]): Automation[] {
   const rank = (a: Automation) => (a.trigger.type === 'manual' ? '0' : a.trigger.type === 'time' ? `1${a.trigger.at}` : a.trigger.type === 'sun' ? `2${a.trigger.event}` : '3')
