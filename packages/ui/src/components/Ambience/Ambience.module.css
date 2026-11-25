@@ -38,7 +38,7 @@
 /* ---------- Flames ---------- */
 
 .flames {
-  height: 40%;
+  height: 42%;
 }
 
 /* The opacity is on the row, not on each flame: flames that overlap read as one flat shape. */
@@ -61,22 +61,6 @@
   position: absolute;
   bottom: -6%;
   transform-origin: 50% 100%;
-  animation: flicker 2.4s ease-in-out infinite alternate;
-}
-
-@keyframes flicker {
-  0% {
-    transform: scale(1, 0.8) skewX(-4deg);
-  }
-  35% {
-    transform: scale(0.93, 1.02) skewX(5deg);
-  }
-  65% {
-    transform: scale(1.05, 0.88) skewX(-2deg);
-  }
-  100% {
-    transform: scale(0.95, 1.1) skewX(4deg);
-  }
 }
 
 /* ---------- Water ---------- */
@@ -97,15 +81,34 @@
   animation: bob 1.7s ease-in-out infinite alternate;
 }
 
-/* Crest on top, water below, twice the tile's width: it slides by half of itself. */
+/* A wave: its opacity is here, on the still parent, so its two copies read as one flat shape where they meet. */
 .wave {
   position: absolute;
   left: 0;
+  right: 0;
   bottom: 0;
-  width: 200%;
+  --wave-time: 16s;
+}
+
+/* Crest on top, water below. Two pixels wider than the tile: the copies overlap instead of leaving a gap. */
+.copy {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(100% + 2px);
   display: flex;
   flex-direction: column;
-  animation: slide 16s linear infinite;
+  animation: var(--wave-time) linear infinite;
+  animation-direction: var(--wave-way, normal);
+}
+
+.first {
+  animation-name: slide-out;
+}
+
+.second {
+  animation-name: slide-in;
 }
 
 .crest {
@@ -123,8 +126,8 @@
 .swellBack {
   top: -18px;
   opacity: 0.1;
-  animation-duration: 23s;
-  animation-direction: reverse;
+  --wave-time: 23s;
+  --wave-way: reverse;
 }
 
 .swellBack .crest {
@@ -134,7 +137,7 @@
 .swellFront {
   top: -8px;
   opacity: 0.12;
-  animation-duration: 15s;
+  --wave-time: 15s;
 }
 
 .swellFront .crest {
@@ -144,8 +147,8 @@
 .chopBack {
   top: -26px;
   opacity: 0.1;
-  animation-duration: 7s;
-  animation-direction: reverse;
+  --wave-time: 7s;
+  --wave-way: reverse;
 }
 
 .chopBack .crest {
@@ -155,16 +158,28 @@
 .chopFront {
   top: -12px;
   opacity: 0.13;
-  animation-duration: 4.5s;
+  --wave-time: 4.5s;
 }
 
 .chopFront .crest {
   height: 18px;
 }
 
-@keyframes slide {
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 

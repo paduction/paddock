@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
 import styles from './Ambience.module.css'
 
 /**
@@ -36,77 +36,119 @@ interface Flame {
   w: number
   /** Height, % of the flames' band */
   h: number
-  /** Seconds for one flicker, and where in it this flame starts */
-  beat: number
-  shift: number
+  /** Which of SHAPES, and whether it leans the other way */
+  shape: number
+  flip: boolean
 }
 
-// two rows: wide coral flames behind, smaller amber ones in front
-const BACK: Flame[] = [
-  { x: -8, w: 26, h: 70, beat: 2.9, shift: 0.4 },
-  { x: 9, w: 24, h: 94, beat: 2.3, shift: 1.7 },
-  { x: 25, w: 25, h: 62, beat: 3.1, shift: 0.9 },
-  { x: 41, w: 24, h: 100, beat: 2.6, shift: 2.2 },
-  { x: 57, w: 25, h: 68, beat: 2.2, shift: 0.2 },
-  { x: 72, w: 24, h: 90, beat: 3.0, shift: 1.3 },
-  { x: 86, w: 26, h: 64, beat: 2.5, shift: 2.6 },
-]
-const FRONT: Flame[] = [
-  { x: -4, w: 21, h: 40, beat: 1.9, shift: 1.1 },
-  { x: 13, w: 20, h: 54, beat: 2.4, shift: 0.3 },
-  { x: 30, w: 21, h: 36, beat: 2.0, shift: 1.8 },
-  { x: 47, w: 20, h: 56, beat: 2.7, shift: 0.7 },
-  { x: 64, w: 21, h: 38, beat: 2.1, shift: 2.0 },
-  { x: 81, w: 22, h: 50, beat: 2.5, shift: 1.4 },
+// tongues of fire: pointed tip, straight foot so that neighbours join at the bottom
+const SHAPES = [
+  'M60 0C58 22 93 44 93 73V100H7V73C7 50 30 44 40 27C46 17 55 12 60 0Z',
+  'M42 0C50 16 44 26 56 38C70 52 90 58 90 76V100H10V76C10 56 28 50 34 34C38 22 36 12 42 0Z',
+  'M50 0C52 18 68 26 72 42C76 36 79 30 79 22C90 38 94 56 94 74V100H6V74C6 54 22 46 29 30C33 39 38 42 42 40C40 26 44 12 50 0Z',
 ]
 
-// a tongue of fire: soft bent tip, straight foot so that neighbours join at the bottom
-const FLAME = 'M62 2C70 6 66 18 70 28C76 42 94 52 94 74V100H6V74C6 54 26 46 34 30C40 18 50 -4 62 2Z'
+const between = (min: number, max: number) => min + Math.random() * (max - min)
+
+/** A row of flames drawn by chance: no two fires look the same, and none looks combed. */
+function drawRow(count: number, width: [number, number], height: [number, number]): Flame[] {
+  const step = 100 / count
+  return Array.from({ length: count }, (_, i) => {
+    const w = between(...width)
+    return { x: i * step + step / 2 - w / 2 + between(-step / 4, step / 4), w, h: between(...height), shape: Math.floor(Math.random() * SHAPES.length), flip: Math.random() < 0.5 }
+  })
+}
+
+/** Where a flame goes next: mostly small moves, now and then a lick that shoots up. */
+function pose(): string {
+  const lick = Math.random() < 0.18
+  const tall = lick ? between(1.12, 1.3) : between(0.68, 1.06)
+  return `scale(${between(0.9, 1.1).toFixed(3)}, ${tall.toFixed(3)}) skewX(${between(-9, 9).toFixed(1)}deg)`
+}
+
+/**
+ * Moves each flame from one chance pose to the next, for ever: a loop would show.
+ * Each move is one transform animation (the graphics chip does it); the script only picks the next pose.
+ */
+function useFlicker(band: RefObject<HTMLDivElement | null>, on: boolean) {
+  useEffect(() => {
+    const host = band.current
+    if (!on || !host || !('animate' in host) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let alive = true
+    const timers = new Set<ReturnType<typeof setTimeout>>()
+    const later = (run: () => void, ms: number) => {
+      const timer = setTimeout(() => {
+        timers.delete(timer)
+        run()
+      }, ms)
+      timers.add(timer)
+    }
+    const flicker = (flame: SVGElement) => {
+      if (!alive) return
+      // the screensaver is on: rest, and look again in a while
+      if (flame.closest('[data-pd-still]')) return later(() => flicker(flame), 1500)
+      const next = pose()
+      const move = flame.animate([{ transform: flame.style.transform || 'none' }, { transform: next }], { duration: between(240, 760), easing: 'ease-in-out' })
+      move.onfinish = () => {
+        flame.style.transform = next
+        flicker(flame)
+      }
+    }
+    host.querySelectorAll('svg').forEach((flame) => later(() => flicker(flame), between(0, 400)))
+    return () => {
+      alive = false
+      timers.forEach(clearTimeout)
+      host.getAnimations?.({ subtree: true }).forEach((move) => move.cancel())
+    }
+  }, [band, on])
+}
 
 function FlameRow({ flames, className }: { flames: Flame[]; className: string }) {
   return (
     <div className={className}>
       {flames.map((f, i) => (
-        <svg
-          key={i}
-          className={`${styles.flame} ${styles.moving}`}
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          style={vars({ left: `${f.x}%`, width: `${f.w}%`, height: `${f.h}%`, animationDuration: `${f.beat}s`, animationDelay: `-${f.shift}s` })}
-        >
-          {/* every other flame leans the other way */}
-          <path d={FLAME} fill="currentColor" transform={i % 2 ? 'translate(100 0) scale(-1 1)' : undefined} />
+        <svg key={i} className={`${styles.flame} ${styles.moving}`} viewBox="0 0 100 100" preserveAspectRatio="none" style={vars({ left: `${f.x}%`, width: `${f.w}%`, height: `${f.h}%` })}>
+          <path d={SHAPES[f.shape]} fill="currentColor" transform={f.flip ? 'translate(100 0) scale(-1 1)' : undefined} />
         </svg>
       ))}
     </div>
   )
 }
 
-/** Low flames along the bottom of the tile while `active`. */
+/** Low flames along the bottom of the tile while `active`: tall coral ones behind, small amber ones in front. */
 export function Flames({ active }: { active: boolean }) {
-  if (!useLinger(active)) return null
+  const shown = useLinger(active)
+  const band = useRef<HTMLDivElement>(null)
+  const [rows] = useState(() => ({ back: drawRow(9, [15, 26], [42, 100]), front: drawRow(9, [10, 18], [20, 56]) }))
+  useFlicker(band, shown)
+  if (!shown) return null
   return (
-    <div className={active ? styles.flames : `${styles.flames} ${styles.leaving}`} aria-hidden>
-      <FlameRow flames={BACK} className={`${styles.row} ${styles.rowBack}`} />
-      <FlameRow flames={FRONT} className={`${styles.row} ${styles.rowFront}`} />
+    <div ref={band} className={active ? styles.flames : `${styles.flames} ${styles.leaving}`} aria-hidden>
+      <FlameRow flames={rows.back} className={`${styles.row} ${styles.rowBack}`} />
+      <FlameRow flames={rows.front} className={`${styles.row} ${styles.rowFront}`} />
     </div>
   )
 }
 
 /* ---------- Water ---------- */
 
-// one wave is drawn twice side by side: sliding it by half its width loops without a seam
-const SWELL = 'M0 10Q150 -2 300 10T600 10T900 10T1200 10V20H0Z'
-const CHOP_LONG = 'M0 10Q75 -4 150 10T300 10T450 10T600 10T750 10T900 10T1050 10T1200 10V20H0Z'
-const CHOP_SHORT = 'M0 10Q50 -2 100 10T200 10T300 10T400 10T500 10T600 10T700 10T800 10T900 10T1000 10T1100 10T1200 10V20H0Z'
+// One wave is as wide as the tile and repeats exactly over that width. Two copies follow each other:
+// when the first has left on one side, the second has taken its place. Nothing is ever wider than the tile.
+const SWELL = 'M0 10Q150 -2 300 10T600 10V20H0Z'
+const CHOP_LONG = 'M0 10Q75 -4 150 10T300 10T450 10T600 10V20H0Z'
+const CHOP_SHORT = 'M0 10Q50 -2 100 10T200 10T300 10T400 10T500 10T600 10V20H0Z'
 
 function Wave({ path, className }: { path: string; className: string }) {
   return (
-    <div className={`${styles.wave} ${styles.moving} ${className}`}>
-      <svg className={styles.crest} viewBox="0 0 1200 20" preserveAspectRatio="none">
-        <path d={path} fill="currentColor" />
-      </svg>
-      <div className={styles.depth} />
+    <div className={`${styles.wave} ${className}`}>
+      {[styles.first, styles.second].map((copy) => (
+        <div key={copy} className={`${styles.copy} ${copy} ${styles.moving}`}>
+          <svg className={styles.crest} viewBox="0 0 600 20" preserveAspectRatio="none">
+            <path d={path} fill="currentColor" />
+          </svg>
+          <div className={styles.depth} />
+        </div>
+      ))}
     </div>
   )
 }
