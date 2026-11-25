@@ -13,14 +13,14 @@ export interface TabBarProps {
   onSelect: (id: string) => void
 }
 
-const TAB_WIDTH = 64
-
 /** Icon-only navigation capsule with a sliding highlight. */
 export function TabBar({ tabs, current, onSelect }: TabBarProps) {
   const index = Math.max(0, tabs.findIndex((t) => t.id === current))
+  // with every screen configured (11 tabs) the capsule gets tighter, so that the presence chip still fits beside it
+  const width = tabs.length > 10 ? 54 : 64
   return (
-    <nav className={styles.bar} style={{ gridTemplateColumns: `repeat(${tabs.length}, ${TAB_WIDTH}px)` }}>
-      <span className={styles.highlight} style={{ transform: `translateX(${index * TAB_WIDTH}px)` }} />
+    <nav className={styles.bar} style={{ gridTemplateColumns: `repeat(${tabs.length}, ${width}px)` }}>
+      <span className={styles.highlight} style={{ width, transform: `translateX(${index * width}px)` }} />
       {tabs.map((tab) => {
         const active = tab.id === current
         return (
