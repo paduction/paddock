@@ -31,6 +31,8 @@ jobs:
       - name: Home Assistant's own checks
         uses: home-assistant/actions/hassfest@master
       - name: HACS checks
+        # HACS can only look at public repositories
+        if: ${{ !github.event.repository.private }}
         uses: hacs/action@main
         with:
           category: integration
