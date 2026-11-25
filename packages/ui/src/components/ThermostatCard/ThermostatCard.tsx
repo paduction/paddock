@@ -46,7 +46,8 @@ export function ThermostatCard(p: ThermostatCardProps) {
 
   return (
     <div className={p.heating && !p.off ? `${styles.card} ${styles.heating}` : styles.card}>
-      <Flames active={p.heating && !p.off} />
+      {/* the preset buttons are an opaque bar across the bottom: the fire has to show above it */}
+      <Flames active={p.heating && !p.off} height={p.presets ? 60 : 36} />
       <div className={styles.head}>
         <span className={styles.name}>{p.name}</span>
         <div className={styles.segments}>

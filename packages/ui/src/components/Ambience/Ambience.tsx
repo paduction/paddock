@@ -193,8 +193,12 @@ function FireShape({ fire, size = 1, lick = false }: { fire: Fire; size?: number
   )
 }
 
-/** A low fire along the bottom of the tile while `active`. */
-export function Flames({ active }: { active: boolean }) {
+/**
+ * A fire along the bottom of the tile while `active`.
+ * `height`: how far up it reaches, in % of the tile. Raise it when something opaque covers the bottom of the tile,
+ * so that the flames show above it.
+ */
+export function Flames({ active, height = 36 }: { active: boolean; height?: number }) {
   const shown = useLinger(active)
   const band = useRef<HTMLDivElement>(null)
   const [drawn] = useState(() => ({
@@ -204,7 +208,7 @@ export function Flames({ active }: { active: boolean }) {
   useBurning(band, shown)
   if (!shown) return null
   return (
-    <div ref={band} className={active ? styles.flames : `${styles.flames} ${styles.leaving}`} aria-hidden>
+    <div ref={band} className={active ? styles.flames : `${styles.flames} ${styles.leaving}`} style={vars({ height: `${height}%` })} aria-hidden>
       <div className={`${styles.row} ${styles.rowBack}`}>
         {drawn.fires.map((fire, i) => (
           <FireShape key={i} fire={fire} lick />

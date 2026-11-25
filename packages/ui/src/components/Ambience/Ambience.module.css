@@ -37,10 +37,6 @@
 
 /* ---------- Flames ---------- */
 
-.flames {
-  height: 36%;
-}
-
 /* The opacity is on the row, not on each part: parts that overlap read as one flat shape. */
 .row {
   position: absolute;
