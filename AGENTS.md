@@ -114,7 +114,7 @@ The step-by-step version is the skill `.claude/skills/paddock-develop/SKILL.md`.
 - **Styling** uses the tokens (`var(--pd-…)`) and CSS Modules. No inline colours, no new font.
 - **Animated backgrounds** (flames while heating, water line of the pool) are `packages/ui/src/components/Ambience`.
   A new one follows its rules: only `transform` and `opacity` move, each on its own element (the wall tablet is slow),
-  flames go from one chance pose to the next rather than looping,
+  the fire is built once from chance poses into one long animation per part, so no script runs while it burns,
   and it is driven by a prop of the tile (`heating`, `pumping`), never by an entity.
 - **Optional screens stay optional.** Code must work when an optional block of the configuration is absent.
 - **The integration** is the only Python that runs in Home Assistant. It reads YAML 1.1, where the keys `on`

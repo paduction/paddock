@@ -30,102 +30,196 @@ const vars = (values: Record<string, string>) => values as CSSProperties
 
 /* ---------- Flames ---------- */
 
-interface Flame {
-  /** Left edge and width, % of the tile's width */
+/*
+ * What makes a drawn fire read as fire, and how each point is done with transforms only:
+ * - it flows upwards: tongues shoot up fast and sink back slower, and licks break off, rise, thin out and vanish;
+ * - a flame bends, it does not rock like a cut-out: each one is a body plus a tongue that moves more and faster;
+ * - a draught runs through it: neighbours lean the same way at the same moment (`wind`);
+ * - it has a hot core: a smaller amber flame inside each coral one, and a few sparks above.
+ * Every part gets one long animation (LOOP) made of chance poses, built once: no script runs while it burns,
+ * and with some forty parts on different beats nobody can see the loop come round.
+ */
+
+const LOOP = 12000
+const TURN = Math.PI * 2
+
+interface Fire {
+  /** Centre and width, % of the tile's width */
   x: number
   w: number
   /** Height, % of the flames' band */
   h: number
-  /** Which of SHAPES, and whether it leans the other way */
   shape: number
   flip: boolean
+  /** Where the tongue stands on the body, % of the flame's width */
+  lean: number
 }
 
-// tongues of fire: pointed tip, straight foot so that neighbours join at the bottom
-const SHAPES = [
+// bodies: pointed tip, straight foot so that neighbours join at the bottom
+const BODIES = [
   'M60 0C58 22 93 44 93 73V100H7V73C7 50 30 44 40 27C46 17 55 12 60 0Z',
   'M42 0C50 16 44 26 56 38C70 52 90 58 90 76V100H10V76C10 56 28 50 34 34C38 22 36 12 42 0Z',
   'M50 0C52 18 68 26 72 42C76 36 79 30 79 22C90 38 94 56 94 74V100H6V74C6 54 22 46 29 30C33 39 38 42 42 40C40 26 44 12 50 0Z',
 ]
+// the tongue: slender, bent, its round foot hidden in the body
+const TONGUE = 'M45 0C56 18 45 30 58 45C70 58 84 66 84 82C84 94 70 100 50 100S16 94 16 82C16 62 35 54 39 36C41 24 38 12 45 0Z'
+// a lick that broke off
+const LICK = 'M50 0C60 30 84 50 84 70C84 88 70 100 50 100S16 88 16 70C16 50 40 30 50 0Z'
 
 const between = (min: number, max: number) => min + Math.random() * (max - min)
+const fixed = (value: number) => value.toFixed(2)
 
-/** A row of flames drawn by chance: no two fires look the same, and none looks combed. */
-function drawRow(count: number, width: [number, number], height: [number, number]): Flame[] {
+function drawFires(count: number): Fire[] {
   const step = 100 / count
-  return Array.from({ length: count }, (_, i) => {
-    const w = between(...width)
-    return { x: i * step + step / 2 - w / 2 + between(-step / 4, step / 4), w, h: between(...height), shape: Math.floor(Math.random() * SHAPES.length), flip: Math.random() < 0.5 }
-  })
+  return Array.from({ length: count }, (_, i) => ({
+    x: (i + 0.5) * step + between(-step / 4, step / 4),
+    w: between(20, 31),
+    h: between(48, 92),
+    shape: Math.floor(Math.random() * BODIES.length),
+    flip: Math.random() < 0.5,
+    lean: between(-14, 14),
+  }))
 }
 
-/** Where a flame goes next: mostly small moves, now and then a lick that shoots up. */
-function pose(): string {
-  const lick = Math.random() < 0.18
-  const tall = lick ? between(1.12, 1.3) : between(0.68, 1.06)
-  return `scale(${between(0.9, 1.1).toFixed(3)}, ${tall.toFixed(3)}) skewX(${between(-9, 9).toFixed(1)}deg)`
+type Wind = (ms: number, x: number) => number
+
+/** The draught, in degrees of lean: a few slow swings on top of each other, drifting across the tile. Comes round with LOOP. */
+function drawWind(): Wind {
+  const swings = [
+    { size: 5.5, turns: 1 },
+    { size: 3.2, turns: 3 },
+    { size: 2, turns: 7 },
+  ].map((swing) => ({ ...swing, phase: between(0, TURN) }))
+  return (ms, x) => swings.reduce((sum, s) => sum + s.size * Math.sin(TURN * ((s.turns * ms) / LOOP - x / 280) + s.phase), 0)
+}
+
+/** Moments of the loop, in ms, with an uneven gap between them. */
+function beats(min: number, max: number): number[] {
+  const out = [0]
+  for (let ms = between(min, max); ms < LOOP - min; ms += between(min, max)) out.push(ms)
+  return out
+}
+
+/** Closes a list of poses into a loop: it ends as it starts. */
+const looped = (frames: Keyframe[]): Keyframe[] => [...frames, { ...frames[0], offset: 1 }]
+
+/** The body breathes and leans a little with the draught. */
+function bodyFrames(wind: Wind, x: number): Keyframe[] {
+  return looped(
+    beats(420, 900).map((ms) => ({
+      offset: ms / LOOP,
+      easing: 'ease-in-out',
+      transform: `skewX(${fixed(0.35 * wind(ms, x) + between(-1.5, 1.5))}deg) scale(${fixed(between(0.95, 1.05))}, ${fixed(between(0.9, 1.08))})`,
+    })),
+  )
+}
+
+/** The tongue flickers several times a second: up fast, down slower, thinner when taller, leaning hard with the draught. */
+function tongueFrames(wind: Wind, x: number): Keyframe[] {
+  const moments = beats(120, 330)
+  const tall = moments.map(() => (Math.random() < 0.2 ? between(1.12, 1.38) : between(0.5, 1)))
+  return looped(
+    moments.map((ms, i) => ({
+      offset: ms / LOOP,
+      easing: tall[(i + 1) % tall.length] > tall[i] ? 'cubic-bezier(0.15, 0.75, 0.3, 1)' : 'ease-in',
+      transform: `skewX(${fixed(1.3 * wind(ms, x) + between(-6, 6))}deg) scale(${fixed(1.1 - 0.32 * (tall[i] - 0.5) + between(-0.05, 0.05))}, ${fixed(tall[i])})`,
+    })),
+  )
 }
 
 /**
- * Moves each flame from one chance pose to the next, for ever: a loop would show.
- * Each move is one transform animation (the graphics chip does it); the script only picks the next pose.
+ * Something that leaves the fire again and again: it appears, rises, shrinks and fades, then waits unseen.
+ * `rise` and `drift` are in the unit given (the part's own size in %, or px).
  */
-function useFlicker(band: RefObject<HTMLDivElement | null>, on: boolean) {
+function risingFrames(wind: Wind, x: number, o: { gap: [number, number]; life: [number, number]; rise: [number, number]; spread: number; unit: string; end: string }): Keyframe[] {
+  const rest = { opacity: 0, transform: 'none' }
+  const frames: Keyframe[] = [{ ...rest, offset: 0 }]
+  for (let ms = between(0, o.gap[1]); ms + o.life[1] < LOOP; ms += between(...o.gap)) {
+    const life = between(...o.life)
+    const from = between(-o.spread, o.spread)
+    const to = from + wind(ms, x) * (o.spread / 12)
+    const up = between(...o.rise)
+    frames.push({ offset: ms / LOOP, opacity: 0, easing: 'ease-out', transform: `translate(${fixed(from)}${o.unit}, 0) scale(1)` })
+    frames.push({ offset: (ms + life * 0.15) / LOOP, opacity: 1, easing: 'ease-out', transform: `translate(${fixed(from + (to - from) * 0.3)}${o.unit}, ${fixed(-up * 0.3)}${o.unit}) scale(1)` })
+    frames.push({ offset: (ms + life) / LOOP, opacity: 0, transform: `translate(${fixed(to)}${o.unit}, ${fixed(-up)}${o.unit}) ${o.end}` })
+    ms += life
+  }
+  return [...frames, { ...rest, offset: 1 }]
+}
+
+const FRAMES: Record<string, (wind: Wind, x: number) => Keyframe[]> = {
+  body: bodyFrames,
+  tongue: tongueFrames,
+  lick: (wind, x) => risingFrames(wind, x, { gap: [350, 1900], life: [380, 700], rise: [140, 300], spread: 45, unit: '%', end: 'scale(0.15, 0.4)' }),
+  spark: (wind, x) => risingFrames(wind, x, { gap: [700, 3600], life: [900, 1700], rise: [70, 190], spread: 26, unit: 'px', end: 'scale(0.4)' }),
+}
+
+/** Sets the fire going: one endless animation per part (see the note above). Rests under the screensaver. */
+function useBurning(band: RefObject<HTMLDivElement | null>, on: boolean) {
   useEffect(() => {
     const host = band.current
     if (!on || !host || !('animate' in host) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    let alive = true
-    const timers = new Set<ReturnType<typeof setTimeout>>()
-    const later = (run: () => void, ms: number) => {
-      const timer = setTimeout(() => {
-        timers.delete(timer)
-        run()
-      }, ms)
-      timers.add(timer)
-    }
-    const flicker = (flame: SVGElement) => {
-      if (!alive) return
-      // the screensaver is on: rest, and look again in a while
-      if (flame.closest('[data-pd-still]')) return later(() => flicker(flame), 1500)
-      const next = pose()
-      const move = flame.animate([{ transform: flame.style.transform || 'none' }, { transform: next }], { duration: between(240, 760), easing: 'ease-in-out' })
-      move.onfinish = () => {
-        flame.style.transform = next
-        flicker(flame)
-      }
-    }
-    host.querySelectorAll('svg').forEach((flame) => later(() => flicker(flame), between(0, 400)))
+    const wind = drawWind()
+    const moves = [...host.querySelectorAll<HTMLElement | SVGElement>('[data-part]')].map((part) =>
+      part.animate(FRAMES[part.dataset.part!](wind, Number(part.dataset.x)), { duration: LOOP, iterations: Infinity }),
+    )
+    let resting = false
+    const watch = setInterval(() => {
+      const still = !!host.closest('[data-pd-still]')
+      if (still === resting) return
+      resting = still
+      moves.forEach((move) => (still ? move.pause() : move.play()))
+    }, 1500)
     return () => {
-      alive = false
-      timers.forEach(clearTimeout)
-      host.getAnimations?.({ subtree: true }).forEach((move) => move.cancel())
+      clearInterval(watch)
+      moves.forEach((move) => move.cancel())
     }
   }, [band, on])
 }
 
-function FlameRow({ flames, className }: { flames: Flame[]; className: string }) {
+/** One flame: body, tongue and, for the big ones, the lick that breaks off. `size` shrinks it into a core. */
+function FireShape({ fire, size = 1, lick = false }: { fire: Fire; size?: number; lick?: boolean }) {
+  const part = (name: string, className: string, path: string, style?: CSSProperties) => (
+    <svg data-part={name} data-x={fire.x} className={`${className} ${styles.moving}`} viewBox="0 0 100 100" preserveAspectRatio="none" style={style}>
+      <path d={path} fill="currentColor" transform={fire.flip ? 'translate(100 0) scale(-1 1)' : undefined} />
+    </svg>
+  )
   return (
-    <div className={className}>
-      {flames.map((f, i) => (
-        <svg key={i} className={`${styles.flame} ${styles.moving}`} viewBox="0 0 100 100" preserveAspectRatio="none" style={vars({ left: `${f.x}%`, width: `${f.w}%`, height: `${f.h}%` })}>
-          <path d={SHAPES[f.shape]} fill="currentColor" transform={f.flip ? 'translate(100 0) scale(-1 1)' : undefined} />
-        </svg>
-      ))}
+    <div className={styles.fire} style={vars({ left: `${fire.x - (fire.w * size) / 2}%`, width: `${fire.w * size}%`, height: `${fire.h * size}%` })}>
+      {lick && part('lick', styles.lick, LICK, vars({ left: `${37 + fire.lean}%` }))}
+      {part('tongue', styles.tongue, TONGUE, vars({ left: `${20 + fire.lean}%` }))}
+      {part('body', styles.body, BODIES[fire.shape])}
     </div>
   )
 }
 
-/** Low flames along the bottom of the tile while `active`: tall coral ones behind, small amber ones in front. */
+/** A low fire along the bottom of the tile while `active`. */
 export function Flames({ active }: { active: boolean }) {
   const shown = useLinger(active)
   const band = useRef<HTMLDivElement>(null)
-  const [rows] = useState(() => ({ back: drawRow(9, [15, 26], [42, 100]), front: drawRow(9, [10, 18], [20, 56]) }))
-  useFlicker(band, shown)
+  const [drawn] = useState(() => ({
+    fires: drawFires(7),
+    sparks: Array.from({ length: 5 }, () => ({ x: between(8, 92), size: between(3, 5) })),
+  }))
+  useBurning(band, shown)
   if (!shown) return null
   return (
     <div ref={band} className={active ? styles.flames : `${styles.flames} ${styles.leaving}`} aria-hidden>
-      <FlameRow flames={rows.back} className={`${styles.row} ${styles.rowBack}`} />
-      <FlameRow flames={rows.front} className={`${styles.row} ${styles.rowFront}`} />
+      <div className={`${styles.row} ${styles.rowBack}`}>
+        {drawn.fires.map((fire, i) => (
+          <FireShape key={i} fire={fire} lick />
+        ))}
+      </div>
+      <div className={`${styles.row} ${styles.rowFront}`}>
+        {drawn.fires.map((fire, i) => (
+          <FireShape key={i} fire={fire} size={0.55} />
+        ))}
+      </div>
+      <div className={`${styles.row} ${styles.rowSparks}`}>
+        {drawn.sparks.map((spark, i) => (
+          <span key={i} data-part="spark" data-x={spark.x} className={`${styles.spark} ${styles.moving}`} style={vars({ left: `${spark.x}%`, width: `${spark.size}px`, height: `${spark.size}px` })} />
+        ))}
+      </div>
     </div>
   )
 }
