@@ -1,5 +1,6 @@
 // Paddock UI — presentational touch components. No Home Assistant in here: props in, events out.
 export * from './components/Icon/Icon'
+export * from './components/Artwork/Artwork'
 export * from './components/Stage/Stage'
 export * from './components/LightTile/LightTile'
 export * from './components/SceneButton/SceneButton'

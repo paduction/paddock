@@ -16,6 +16,7 @@ export function MiniPlayerWidget({ player }: { player: Player }) {
       title={player.title}
       artist={player.artist || player.album}
       artwork={haImage(player.picture)}
+      placeholderIcon={player.fromTv ? 'tv' : 'music_note'}
       playing={player.state === 'playing'}
       progress={d ? (position / d) * 100 : 0}
       elapsed={clock(position)}

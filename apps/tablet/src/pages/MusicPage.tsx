@@ -60,6 +60,7 @@ export function MusicPage() {
         sourceActive={on}
         counter={first ? playlist!.title : player.album || player.name}
         artwork={haImage(player.picture) || first?.thumb || ''}
+        placeholderIcon={player.fromTv ? 'tv' : 'music_note'}
         state={connecting ? t('music.connecting') : starting ? t('music.starting') : first ? t('music.ready') : playing ? t('music.playing') : on ? t('music.paused') : t('music.off')}
         stateIcon={starting || connecting ? 'progress_activity' : playing ? 'graphic_eq' : 'pause_circle'}
         stateSpinning={starting || connecting}

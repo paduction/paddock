@@ -1,4 +1,5 @@
 import { useRef, useState, type PointerEvent } from 'react'
+import { Artwork } from '../Artwork/Artwork'
 import { Icon } from '../Icon/Icon'
 import { useStage } from '../Stage/Stage'
 import { bumpScale, useTween } from '../../hooks/useTween'
@@ -10,6 +11,8 @@ export interface MusicPlayerProps {
   sourceActive: boolean
   counter: string
   artwork: string
+  /** Shown when there is no picture, or when it cannot be loaded. */
+  placeholderIcon?: string
   state: string
   stateIcon: string
   stateSpinning: boolean
@@ -128,7 +131,7 @@ export function MusicPlayer(p: MusicPlayerProps) {
 
       <div className={styles.now}>
         <div className={styles.art}>
-          {p.artwork ? <img src={p.artwork} alt="" className={styles.image} /> : <Icon name="music_note" size={72} filled color="var(--pd-text-3)" />}
+          <Artwork src={p.artwork} className={styles.image} icon={p.placeholderIcon ?? 'music_note'} iconSize={72} />
         </div>
         <div className={styles.text}>
           <span className={styles.state} style={{ color: p.stateHighlight ? 'var(--pd-accent-text)' : 'var(--pd-text-2)' }}>

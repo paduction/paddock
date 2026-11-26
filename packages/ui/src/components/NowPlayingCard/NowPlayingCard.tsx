@@ -1,3 +1,4 @@
+import { Artwork } from '../Artwork/Artwork'
 import { Icon } from '../Icon/Icon'
 import { useTween } from '../../hooks/useTween'
 import styles from './NowPlayingCard.module.css'
@@ -24,7 +25,7 @@ export function NowPlayingCard(p: NowPlayingCardProps) {
     <div className={styles.card}>
       <div className={styles.media}>
         <div className={styles.art}>
-          {p.artwork ? <img src={p.artwork} alt="" className={styles.image} /> : <Icon name={p.placeholderIcon} size={32} filled color="var(--pd-text-3)" />}
+          <Artwork src={p.artwork} className={styles.image} icon={p.placeholderIcon} iconSize={32} />
         </div>
         <div className={styles.text}>
           <div className={styles.state} style={{ color: p.playing ? 'var(--pd-accent-text)' : 'var(--pd-text-2)' }}>

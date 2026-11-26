@@ -1,4 +1,5 @@
 import type { MouseEvent } from 'react'
+import { Artwork } from '../Artwork/Artwork'
 import { Icon } from '../Icon/Icon'
 import styles from './MiniPlayer.module.css'
 
@@ -6,6 +7,8 @@ export interface MiniPlayerProps {
   title: string
   artist: string
   artwork: string | null
+  /** Shown when there is no picture, or when it cannot be loaded. */
+  placeholderIcon?: string
   playing: boolean
   /** 0–100 */
   progress: number
@@ -26,7 +29,7 @@ export function MiniPlayer(p: MiniPlayerProps) {
     <div className={styles.player} onClick={p.onOpen}>
       <div className={styles.row}>
         <div className={styles.art}>
-          {p.artwork ? <img src={p.artwork} alt="" className={styles.image} /> : <Icon name="music_note" size={22} color="var(--pd-text-2)" />}
+          <Artwork src={p.artwork} className={styles.image} icon={p.placeholderIcon ?? 'music_note'} iconSize={22} iconFilled={false} iconColor="var(--pd-text-2)" />
         </div>
         <div className={styles.text}>
           <span className={styles.title}>{p.title}</span>

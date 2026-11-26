@@ -19,6 +19,8 @@ export interface Player {
   position: number
   positionAt: number
   picture: string | null
+  /** The sound of a TV sent to these speakers (AirPlay): a film or a channel, usually without a picture. */
+  fromTv: boolean
 }
 
 /** Some apps report their bundle id as title: treat it as "no title". */
@@ -44,6 +46,7 @@ export function toPlayer(entity: string, e?: HassEntity): Player {
     position: a.media_position || 0,
     positionAt: a.media_position_updated_at ? Date.parse(a.media_position_updated_at) : Date.now(),
     picture: a.entity_picture || null,
+    fromTv: /tvairplay/i.test(String(a.app_id || '')),
   }
 }
 
