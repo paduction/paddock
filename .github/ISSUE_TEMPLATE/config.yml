@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Installing and configuring
+    url: https://github.com/paduction/paddock/blob/main/docs/en/install.md
+    about: The walk-through, in English and in French (docs/fr).

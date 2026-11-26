@@ -119,6 +119,7 @@ and a rule in `core/domain` never knows React exists.
 | Widget | `tablet/src/widgets/LightWidget.tsx` — connects one light to one tile | all of the above |
 
 More in [AGENTS.md](AGENTS.md), which is as useful to people as to assistants.
+To propose a change: [CONTRIBUTING.md](CONTRIBUTING.md). To report a security problem: [SECURITY.md](SECURITY.md).
 
 ## Credits
 

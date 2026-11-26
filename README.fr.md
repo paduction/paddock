@@ -93,6 +93,7 @@ la fenêtre retient sa taille, et il n'y a pas d'écran de veille.
 
 Le code, ses commentaires et le guide des contributeurs sont en anglais : voir la section
 [Working on the code](README.md#working-on-the-code) du README anglais et [AGENTS.md](AGENTS.md).
+Pour proposer un changement : [CONTRIBUTING.md](CONTRIBUTING.md). Pour signaler un problème de sécurité : [SECURITY.md](SECURITY.md).
 
 ## Crédits
 
