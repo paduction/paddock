@@ -1,7 +1,7 @@
 # Paddock
 
-**A wall-tablet interface for Home Assistant** — lights, shutters, heating, cameras, music, cinema, energy —
-that also runs as a desktop app on Mac, Windows and Linux.
+**A wall-tablet interface for Home Assistant** — lights, shutters, heating, cameras, music, cinema, energy,
+schedules and modes — that also runs as a desktop app on Mac, Windows and Linux.
 
 [Lire en français](README.fr.md)
 
@@ -9,12 +9,21 @@ that also runs as a desktop app on Mac, Windows and Linux.
 
 | | |
 |---|---|
-| ![Lighting, light theme](docs/images/lights-light.png) | ![Shutters](docs/images/covers-dark.png) |
+| ![Lighting](docs/images/lights-dark.png) | ![Shutters](docs/images/covers-dark.png) |
+| ![Music](docs/images/music-dark.png) | ![Films](docs/images/cinema-dark.png) |
+| ![Energy](docs/images/energy-dark.png) | ![Cleaning](docs/images/cleaning-dark.png) |
+| ![Schedules and modes](docs/images/automations-dark.png) | ![The home page, light theme](docs/images/home-light.png) |
+
+<sub>A fictional home, shown here in French. The film posters, album covers, titles and artists are invented for the demo.</sub>
 
 - **Your home stays yours.** The app contains nothing about your house. Everything specific (entities, rooms, keys)
   lives in one file, `paddock.yaml`, inside your Home Assistant, and is only given to signed-in devices.
 - **Only what you have.** A screen you do not configure (games, music, energy, cameras…) is simply not shown.
+- **Schedules and modes, made on the wall.** "Leaving", "Good night", the pool pump from 6 to 8, the shutters at sunset:
+  created and edited in the interface, run by Home Assistant.
 - **English and French.**
+- **The design file is open too.** Variables for colours, spacing, radii and motion, 117 components and 66 screens:
+  [Paddock on Figma](https://www.figma.com/design/8pflUMr4pHXgcoCuD2mCNK/Paddock) (view and duplicate).
 
 ## Install in four steps
 
@@ -71,7 +80,9 @@ pnpm desktop:build   # installer in apps/desktop/src-tauri/target/release/bundle
 
 You need [Rust](https://rustup.rs) and, on Linux, the WebKitGTK libraries
 (`libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev libayatana-appindicator3-dev`).
-An installer is built for the system you build on; `.github/workflows/desktop.yml` builds all three on GitHub.
+There is no installer to download: you build the app on your own computer, for the system you are on,
+from your copy of the code. It is built and used every day on macOS, and its Linux packages (deb, rpm, AppImage) build.
+Windows has not been tried yet: if you build it there, an issue telling how it went is welcome.
 
 What differs from the tablet: links open in your browser, F11 switches to full screen,
 the window remembers its size, and there is no screensaver.

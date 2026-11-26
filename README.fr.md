@@ -1,7 +1,7 @@
 # Paddock
 
 **Une interface de tablette murale pour Home Assistant** — lumières, volets, chauffage, caméras, musique, cinéma,
-énergie — qui tourne aussi en application de bureau sur Mac, Windows et Linux.
+énergie, horaires et modes — qui tourne aussi en application de bureau sur Mac, Windows et Linux.
 
 [Read in English](README.md)
 
@@ -9,13 +9,22 @@
 
 | | |
 |---|---|
-| ![Éclairage, thème clair](docs/images/lights-light.png) | ![Volets](docs/images/covers-dark.png) |
+| ![Éclairage](docs/images/lights-dark.png) | ![Volets](docs/images/covers-dark.png) |
+| ![Musique](docs/images/music-dark.png) | ![Cinéma](docs/images/cinema-dark.png) |
+| ![Énergie](docs/images/energy-dark.png) | ![Ménage](docs/images/cleaning-dark.png) |
+| ![Horaires et modes](docs/images/automations-dark.png) | ![La page d'accueil, thème clair](docs/images/home-light.png) |
+
+<sub>Une maison fictive. Les affiches de films, les pochettes, les titres et les artistes sont inventés pour la démonstration.</sub>
 
 - **Votre maison reste chez vous.** L'application ne contient rien sur votre maison. Tout ce qui vous est propre
   (entités, pièces, clés) tient dans un seul fichier, `paddock.yaml`, rangé dans votre Home Assistant et donné
   uniquement aux appareils connectés.
 - **Seulement ce que vous avez.** Un écran que vous ne configurez pas (jeux, musique, énergie, caméras…) n'est pas affiché.
+- **Des horaires et des modes, créés sur le mur.** « Départ », « Bonne nuit », la pompe de la piscine de 6 h à 8 h,
+  les volets au coucher du soleil : créés et modifiés dans l'interface, exécutés par Home Assistant.
 - **En français et en anglais.**
+- **Le fichier de design est ouvert aussi.** Des variables pour les couleurs, les espaces, les rayons et le mouvement,
+  117 composants et 66 écrans : [Paddock sur Figma](https://www.figma.com/design/8pflUMr4pHXgcoCuD2mCNK/Paddock) (consultation et duplication).
 
 ## Installer en quatre étapes
 
@@ -72,7 +81,10 @@ pnpm desktop:build   # installeur dans apps/desktop/src-tauri/target/release/bun
 
 Il faut [Rust](https://rustup.rs) et, sous Linux, les bibliothèques WebKitGTK
 (`libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev libayatana-appindicator3-dev`).
-L'installeur est construit pour le système sur lequel vous êtes ; `.github/workflows/desktop.yml` construit les trois sur GitHub.
+Il n'y a pas d'installeur à télécharger : vous construisez l'application sur votre ordinateur, pour le système
+sur lequel vous êtes, à partir de votre copie du code. Elle est construite et utilisée tous les jours sous macOS, et ses
+paquets Linux (deb, rpm, AppImage) se construisent. Windows n'a pas encore été essayé : si vous la construisez là,
+un ticket racontant comment cela s'est passé est le bienvenu.
 
 Ce qui diffère de la tablette : les liens s'ouvrent dans votre navigateur, F11 passe en plein écran,
 la fenêtre retient sa taille, et il n'y a pas d'écran de veille.
