@@ -238,6 +238,8 @@ export const en: Record<MessageKey, string> = {
   'music.shuffle': 'Shuffle',
   'music.repeat': 'Repeat',
   'music.volume': 'Volume {n} %',
+  'music.failed': 'This track could not be played',
+  'music.failedTrack': 'Could not play',
 
   'energy.autonomy': "Today's autonomy",
   'energy.selfConsumption': 'Self-consumption',

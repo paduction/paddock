@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { useShallow } from 'zustand/react/shallow'
 import {
+  hasStarted,
   isActive,
   isOn,
   isUserPlaylist,
@@ -41,6 +42,8 @@ interface MusicState {
   pickerOpen: boolean
   /** Track just asked for, until the speaker reports it. */
   pending: { id: string; title: string; at: number } | null
+  /** Track that could not be played: refused by the music service, or never started. */
+  failed: { id: string; title: string; at: number } | null
   /** Mini player hidden for a moment after "stop". */
   hiddenUntil: number
 }
@@ -52,8 +55,12 @@ export const useMusic = create<MusicState>()(() => ({
   playlist: null,
   pickerOpen: false,
   pending: null,
+  failed: null,
   hiddenUntil: 0,
 }))
+
+/** How long a track may take to start before it counts as failed (the music service tries several tracks first). */
+export const START_WINDOW = 30e3
 
 /** Local values shown at once (volume, connecting) before the speaker reports them. */
 const held = createHold<number | boolean>()
@@ -124,13 +131,25 @@ export const music = {
 
   async playTrack(track: Track) {
     const s = useMusic.getState()
-    useMusic.setState({ pending: { id: track.id, title: track.title, at: Date.now() } })
+    const at = Date.now()
+    useMusic.setState({ pending: { id: track.id, title: track.title, at }, failed: null })
     useUi.getState().touched()
+    // only the latest request may report a failure
+    const fail = () => {
+      if (useMusic.getState().pending?.at === at) useMusic.setState({ pending: null, failed: { id: track.id, title: track.title, at: Date.now() } })
+    }
     await ensureGroup(s.speaker)
     const items = s.playlist?.items ?? [track]
     const from = Math.max(0, items.indexOf(track))
-    const ok = await ha.call(playTracksCall(s.speaker, items.slice(from)))
-    if (!ok) ha.call(playTrackFallbackCall(s.speaker, track))
+    const accepted = (await ha.call(playTracksCall(s.speaker, items.slice(from)))) || (await ha.call(playTrackFallbackCall(s.speaker, track)))
+    if (!accepted) return fail()
+    // Accepted is not playing: the service can still give up on every track. Check that the speaker really started.
+    setTimeout(() => {
+      const now = useMusic.getState()
+      if (now.pending?.at !== at) return
+      if (hasStarted(track, toPlayer(now.speaker, useHass.getState().entities[now.speaker]))) useMusic.setState({ pending: null })
+      else fail()
+    }, Math.max(0, at + START_WINDOW - Date.now()))
   },
 
   /** ▶: plays the first playlist track when nothing is loaded, turns the speaker on, or toggles play/pause. */

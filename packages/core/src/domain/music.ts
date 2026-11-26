@@ -31,6 +31,11 @@ export function isCurrentTrack(track: Track, playing: Player): boolean {
   return !!playing.title && (track.title === playing.title || track.title.toLowerCase().includes(playing.title.toLowerCase()))
 }
 
+/** Has the speaker taken the track that was asked for? Playing it, or paused on it; a track left idle in the queue has not started. */
+export function hasStarted(wanted: Track, p: Player): boolean {
+  return ['playing', 'paused', 'buffering'].includes(p.state) && isCurrentTrack(wanted, p)
+}
+
 export type Repeat = 'off' | 'all' | 'one'
 export const nextRepeat = (r: Repeat): Repeat => ({ off: 'all', all: 'one', one: 'off' } as const)[r] ?? 'off'
 

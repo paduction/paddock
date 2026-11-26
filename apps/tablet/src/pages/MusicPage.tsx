@@ -4,7 +4,7 @@ import { config } from '../config'
 import { haImage } from '../ha'
 import { t } from '../i18n'
 import { useClock } from '../stores/clock.store'
-import { music, useCurrentPlayer, useMusic, useSpeakers } from '../stores/music.store'
+import { music, START_WINDOW, useCurrentPlayer, useMusic, useSpeakers } from '../stores/music.store'
 import styles from './MusicPage.module.css'
 
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
@@ -12,7 +12,7 @@ const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60))
 export function MusicPage() {
   const player = useCurrentPlayer()
   const speakers = useSpeakers()
-  const { playlist, playlists, playlistName, pickerOpen, pending } = useMusic()
+  const { playlist, playlists, playlistName, pickerOpen, pending, failed } = useMusic()
   const now = useClock((s) => s.now)
   if (!player) return null
 
@@ -22,7 +22,9 @@ export function MusicPage() {
   // Nothing playing: show the first track of the playlist, ready to play
   const first = (!on || !player.title) && playlist?.items.length ? playlist.items[0] : null
   const firstSplit = first ? splitTrackTitle(first.title) : null
-  const starting = !!pending && now - pending.at < 25e3 && !(player.title && pending.title.toLowerCase().includes(player.title.toLowerCase()))
+  const starting = !!pending && now - pending.at < START_WINDOW && !(player.title && pending.title.toLowerCase().includes(player.title.toLowerCase()))
+  // the last request could not be played: say so for a while, then come back to the usual state
+  const failedNow = !!failed && now - failed.at < 20e3
   const speaker = speakers.find((s) => s.entity === player.entity)
   const wanted = playlistName ?? config.music?.playlist ?? ''
 
@@ -35,15 +37,16 @@ export function MusicPage() {
   } else if (playlist) {
     items = playlist.items.map((track) => {
       const current = isCurrentTrack(track, player)
-      const launching = !current && !!pending && pending.id === track.id && now - pending.at < 25e3
-      const ready = !launching && first === track
+      const launching = !current && !!pending && pending.id === track.id && now - pending.at < START_WINDOW
+      const refused = failedNow && failed!.id === track.id && !current
+      const ready = !launching && !refused && first === track
       return {
         key: track.id,
         title: track.title,
-        subtitle: launching ? t('music.starting') : ready ? t('music.readyTrack') : current ? player.artist : '',
+        subtitle: launching ? t('music.starting') : refused ? t('music.failedTrack') : ready ? t('music.readyTrack') : current ? player.artist : '',
         duration: current && player.duration ? clock(player.duration) : '',
-        thumb: !current && !launching && track.thumb ? track.thumb : '',
-        icon: launching ? 'progress_activity' : current ? (playing ? 'graphic_eq' : 'pause') : 'music_note',
+        thumb: !current && !launching && !refused && track.thumb ? track.thumb : '',
+        icon: launching ? 'progress_activity' : refused ? 'warning' : current ? (playing ? 'graphic_eq' : 'pause') : 'music_note',
         spinning: launching,
         highlighted: current || launching,
         onPress: () => music.playTrack(track),
@@ -61,8 +64,8 @@ export function MusicPage() {
         counter={first ? playlist!.title : player.album || player.name}
         artwork={haImage(player.picture) || first?.thumb || ''}
         placeholderIcon={player.fromTv ? 'tv' : 'music_note'}
-        state={connecting ? t('music.connecting') : starting ? t('music.starting') : first ? t('music.ready') : playing ? t('music.playing') : on ? t('music.paused') : t('music.off')}
-        stateIcon={starting || connecting ? 'progress_activity' : playing ? 'graphic_eq' : 'pause_circle'}
+        state={connecting ? t('music.connecting') : starting ? t('music.starting') : failedNow ? t('music.failed') : first ? t('music.ready') : playing ? t('music.playing') : on ? t('music.paused') : t('music.off')}
+        stateIcon={starting || connecting ? 'progress_activity' : failedNow ? 'warning' : playing ? 'graphic_eq' : 'pause_circle'}
         stateSpinning={starting || connecting}
         stateHighlight={playing || connecting || starting}
         title={firstSplit ? firstSplit.title : player.title || (on ? t('music.nothing') : t('music.speakerOff'))}

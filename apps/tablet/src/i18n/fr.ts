@@ -237,6 +237,8 @@ export const fr = {
   'music.shuffle': 'Aléatoire',
   'music.repeat': 'Répéter',
   'music.volume': 'Volume {n} %',
+  'music.failed': 'Ce titre n’a pas pu être lu',
+  'music.failedTrack': 'Lecture impossible',
 
   'energy.autonomy': 'Autonomie du jour',
   'energy.selfConsumption': 'Autoconsommation',
