@@ -14,7 +14,7 @@ schedules and modes — that also runs as a desktop app on Mac, Windows and Linu
 | ![Energy](docs/images/energy-dark.png) | ![Cleaning](docs/images/cleaning-dark.png) |
 | ![Schedules and modes](docs/images/automations-dark.png) | ![The home page, light theme](docs/images/home-light.png) |
 
-<sub>A fictional home, shown here in French. The film posters, album covers, titles and artists are invented for the demo.</sub>
+<sub>A fictional home. The film posters, album covers, titles and artists are invented for the demo.</sub>
 
 - **Your home stays yours.** The app contains nothing about your house. Everything specific (entities, rooms, keys)
   lives in one file, `paddock.yaml`, inside your Home Assistant, and is only given to signed-in devices.

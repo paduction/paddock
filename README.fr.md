@@ -5,14 +5,14 @@
 
 [Read in English](README.md)
 
-![La page d'accueil](docs/images/home-dark.png)
+![La page d'accueil](docs/images/fr/home-dark.png)
 
 | | |
 |---|---|
-| ![Éclairage](docs/images/lights-dark.png) | ![Volets](docs/images/covers-dark.png) |
-| ![Musique](docs/images/music-dark.png) | ![Cinéma](docs/images/cinema-dark.png) |
-| ![Énergie](docs/images/energy-dark.png) | ![Ménage](docs/images/cleaning-dark.png) |
-| ![Horaires et modes](docs/images/automations-dark.png) | ![La page d'accueil, thème clair](docs/images/home-light.png) |
+| ![Éclairage](docs/images/fr/lights-dark.png) | ![Volets](docs/images/fr/covers-dark.png) |
+| ![Musique](docs/images/fr/music-dark.png) | ![Cinéma](docs/images/fr/cinema-dark.png) |
+| ![Énergie](docs/images/fr/energy-dark.png) | ![Ménage](docs/images/fr/cleaning-dark.png) |
+| ![Horaires et modes](docs/images/fr/automations-dark.png) | ![La page d'accueil, thème clair](docs/images/fr/home-light.png) |
 
 <sub>Une maison fictive. Les affiches de films, les pochettes, les titres et les artistes sont inventés pour la démonstration.</sub>
 
