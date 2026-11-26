@@ -198,12 +198,20 @@
 }
 
 .labels {
-  display: flex;
-  justify-content: space-between;
+  position: relative;
+  height: 16px;
   margin-top: 6px;
   font-size: 12px;
   font-weight: 600;
+  line-height: 16px;
   color: var(--pd-text-3);
+}
+
+/* centred on its tick; the degree sign hangs outside so the digits are the centre */
+.labels span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 /* Presets */

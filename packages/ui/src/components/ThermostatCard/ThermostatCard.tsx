@@ -156,7 +156,8 @@ function Ruler({ from, to, min, max, target, current, off, format, onChange }: R
   })
 
   const labels = []
-  for (let v = from; v <= to; v += 2) labels.push(<span key={v}>{v}°</span>)
+  // each label sits under its own tick, at the same position as the marks
+  for (let v = from; v <= to; v += 2) labels.push(<span key={v} style={{ left: pos(v) }}>{v}°</span>)
 
   return (
     <div
