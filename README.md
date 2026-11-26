@@ -23,7 +23,7 @@ schedules and modes — that also runs as a desktop app on Mac, Windows and Linu
   created and edited in the interface, run by Home Assistant.
 - **English and French.**
 - **The design file is open too.** Variables for colours, spacing, radii and motion, 117 components and 66 screens:
-  [Paddock on Figma](https://www.figma.com/design/8pflUMr4pHXgcoCuD2mCNK/Paddock) (view and duplicate).
+  [Paddock on Figma](https://www.figma.com/community/file/1707764094286027560/paddock-home-assistant-wall-tablet-ui-kit-design-system) (on Figma Community, free to duplicate).
 
 ## Install in four steps
 

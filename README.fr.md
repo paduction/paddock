@@ -24,7 +24,7 @@
   les volets au coucher du soleil : créés et modifiés dans l'interface, exécutés par Home Assistant.
 - **En français et en anglais.**
 - **Le fichier de design est ouvert aussi.** Des variables pour les couleurs, les espaces, les rayons et le mouvement,
-  117 composants et 66 écrans : [Paddock sur Figma](https://www.figma.com/design/8pflUMr4pHXgcoCuD2mCNK/Paddock) (consultation et duplication).
+  117 composants et 66 écrans : [Paddock sur Figma](https://www.figma.com/community/file/1707764094286027560/paddock-home-assistant-wall-tablet-ui-kit-design-system) (sur Figma Community, à dupliquer librement).
 
 ## Installer en quatre étapes
 
